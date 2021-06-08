@@ -73,6 +73,72 @@ systemctl daemon-reload
 update-crypto-policies --set FUTURE
 #5097
 systemctl --now enable nftables
+#5075
+echo 'net.ipv4.conf.all.send_redirects = 0' >> /etc/sysctl.conf
+echo 'net.ipv4.conf.default.send_redirects = 0' >> /etc/sysctl.conf
+sysctl -w net.ipv4.conf.all.send_redirects=0
+sysctl -w net.ipv4.conf.default.send_redirects=0
+sysctl -w net.ipv4.route.flush=1
+#5082
+grep -Els "^\s*net\.ipv4\.conf\.all\.rp_filter\s*=\s*0" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv4\.net.ipv4.conf\.all\.rp_filter\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/" $filename; done; sysctl -w net.ipv4.conf.all.rp_filter=1; sysctl -w net.ipv4.route.flush=1
+echo 'net.ipv4.conf.default.rp_filter = 1' >> /etc/sysctl.conf
+sysctl -w net.ipv4.conf.default.rp_filter=1
+sysctl -w net.ipv4.route.flush=1
+#5078
+echo 'net.ipv4.conf.all.secure_redirects = 0' >> /etc/sysctl.conf
+echo 'net.ipv4.conf.default.secure_redirects = 0' >> /etc/sysctl.conf
+sysctl -w net.ipv4.conf.all.secure_redirects=0
+sysctl -w net.ipv4.conf.default.secure_redirects=0
+sysctl -w net.ipv4.route.flush=1
+#5084
+echo 'net.ipv6.conf.all.accept_ra = 0' >> /etc/sysctl.conf
+echo 'net.ipv6.conf.default.accept_ra = 0' >> /etc/sysctl.conf
+sysctl -w net.ipv6.conf.all.accept_ra=0
+sysctl -w net.ipv6.conf.default.accept_ra=0
+sysctl -w net.ipv6.route.flush=1
+#5140
+rm -f /etc/cron.deny 
+rm -f /etc/at.deny
+touch /etc/cron.allo
+touch /etc/at.allow
+chmod og-rwx
+chmod og-rwx /etc/cron.allow
+chmod og-rwx /etc/at.allow
+chown root:root /etc/cron.allow
+#5076
+echo 'net.ipv4.conf.all.accept_source_route = 0' >> /etc/sysctl.conf
+echo 'net.ipv4.conf.default.accept_source_route = 0' >> /etc/sysctl.conf
+echo 'net.ipv6.conf.all.accept_source_route = 0' >> /etc/sysctl.conf
+echo 'net.ipv6.conf.default.accept_source_route = 0' >> /etc/sysctl.conf
+sysctl -w net.ipv4.conf.all.accept_source_route=0
+sysctl -w net.ipv4.conf.default.accept_source_route=0
+sysctl -w net.ipv6.conf.all.accept_source_route=0
+sysctl -w net.ipv6.conf.default.accept_source_route=0
+sysctl -w net.ipv4.route.flush=1
+sysctl -w net.ipv6.route.flush=1
+#5142
+echo 'AllowUsers root' >> /etc/ssh/sshd_config
+#5129
+echo 'ForwardToSyslog=yes' >>  /etc/systemd/journald.conf
+#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
  
