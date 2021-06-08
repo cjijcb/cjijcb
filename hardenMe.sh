@@ -51,6 +51,29 @@ grep -q 'GRUB_CMDLINE_LINUX.*audit_backlog_limit=' /etc/default/grub || sed -i -
 grub2-mkconfig -o /boot/grub2/grub.cfg &&
 #5110
 sed -i 's/.*max_log_file_action.*/max_log_file_action = keep_logs/' /etc/audit/auditd.conf
+#5111
+sed -i 's/.*space_left_action.*/space_left_action = email/' /etc/audit/auditd.conf
+sed -i 's/.*action_mail_acct.*/action_mail_acct = root/' /etc/audit/auditd.conf
+echo 'admin_space_left_action = halt' >> /etc/audit/auditd.conf
+#5042
+echo 'Authorized uses only. All activity may be monitored and reported.' > /etc/issue
+#5043
+echo 'Authorized uses only. All activity may be monitored and reported.' > /etc/issue.net
+#5033
+echo 'kernel.randomize_va_space = 2' >> /etc/sysctl.conf
+sysctl -w kernel.randomize_va_space=2
+#5032
+echo '* hard core 0' >> /etc/security/limits.conf
+echo 'fs.suid_dumpable = 0' >> /etc/sysctl.conf
+sysctl -w fs.suid_dumpable=0
+sed -i 's/.*Storage=.*/Storage=none/' /etc/systemd/coredump.conf
+sed -i 's/.*ProcessSizeMax.*/ProcessSizeMax=0/' /etc/systemd/coredump.conf 
+systemctl daemon-reload
+#5050
+update-crypto-policies --set FUTURE
+
+ 
+
 
 
 
