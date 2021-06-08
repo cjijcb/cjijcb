@@ -71,6 +71,9 @@ sed -i 's/.*ProcessSizeMax.*/ProcessSizeMax=0/' /etc/systemd/coredump.conf
 systemctl daemon-reload
 #5050
 update-crypto-policies --set FUTURE
+#5097
+systemctl --now enable nftables
+
 
  
 
