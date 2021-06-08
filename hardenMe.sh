@@ -120,9 +120,18 @@ sysctl -w net.ipv6.route.flush=1
 echo 'AllowUsers root' >> /etc/ssh/sshd_config
 #5129
 echo 'ForwardToSyslog=yes' >>  /etc/systemd/journald.conf
-#
-
-
+#5112
+echo '-w /etc/sudoers -p wa -k scope -w /etc/sudoers.d/ -p wa -k scope'  >> /etc/audit/rules.d/audit.rules
+#5113
+echo '-w /var/log/lastlog -p wa -k logins -w /var/run/faillock/ -p wa -k logins'  >> /etc/audit/rules.d/audit.rules
+#5114
+echo '-w /var/run/utmp -p wa -k session -w /var/log/wtmp -p wa -k logins -w /var/log/btmp -p wa -k logins'  >> /etc/audit/rules.d/audit.rules
+#5116
+echo '-w /etc/selinux/ -p wa -k MAC-policy -w /usr/share/selinux/ -p wa -k MAC-policy'  >> /etc/audit/rules.d/audit.rules
+#5117
+echo '-a always,exit -F arch=b64 -S sethostname -S setdomainname -k system-locale -a always,exit -F arch=b32 -S sethostname -S setdomainname -k system-locale -w /etc/issue -p wa -k system-locale -w /etc/issue.net -p wa -k system-locale -w /etc/hosts -p wa -k system-locale -w /etc/sysconfig/network -p wa -k system-locale -w /etc/sysconfig/network-scripts/ -p wa -k system-locale'  >> /etc/audit/rules.d/audit.rules
+#5124
+echo '-w /var/log/sudo.log -p wa -k actions' >>  /etc/audit/rules.d/audit.rules
 
 
 
