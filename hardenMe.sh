@@ -132,6 +132,39 @@ echo '-w /etc/selinux/ -p wa -k MAC-policy -w /usr/share/selinux/ -p wa -k MAC-p
 echo '-a always,exit -F arch=b64 -S sethostname -S setdomainname -k system-locale -a always,exit -F arch=b32 -S sethostname -S setdomainname -k system-locale -w /etc/issue -p wa -k system-locale -w /etc/issue.net -p wa -k system-locale -w /etc/hosts -p wa -k system-locale -w /etc/sysconfig/network -p wa -k system-locale -w /etc/sysconfig/network-scripts/ -p wa -k system-locale'  >> /etc/audit/rules.d/audit.rules
 #5124
 echo '-w /var/log/sudo.log -p wa -k actions' >>  /etc/audit/rules.d/audit.rules
+#5127
+sed -i '1 i\\$FileCreateMode 0640' /etc/rsyslog.conf
+#5170
+sed -i '1 i/readonly TMOUT=900 ; export TMOUT' /etc/profile
+sed -i '1 i readonly TMOUT=900 ; export TMOUT' /etc/bashrc
+#5102
+nmcli radio all off
+#5103
+grep -q 'GRUB_CMDLINE_LINUX.*ipv6.disable=' /etc/default/grub || sed -i -E 's/^(GRUB_CMDLINE_LINUX)(.*)(ipv6.disable=1|.*)\"/\1\2 ipv6.disable=1"/' /etc/default/grub
+grub2-mkconfig -o /boot/grub2/grub.cfg
+#5115
+echo '-a always,exit -F arch=b32 -S adjtimex -S settimeofday -S stime -k time-change' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b32 -S clock_settime -k time-change' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S adjtimex -S settimeofday -S stime -k time-change' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S clock_settime -k time-change' >> /etc/audit/rules.d/audit.rules
+echo '-w /etc/localtime -p wa -k time-change' >> /etc/audit/rules.d/audit.rules
+#5118
+echo '#cis_5118' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b32 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_mod' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b32 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -k perm_mod' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b32 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_mod' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -k perm_mod' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod' >> /etc/audit/rules.d/audit.rules
+#5120
+echo '#cis_5120' >> /etc/audit/rules.d/audit.rules
+echo '-w /etc/group -p wa -k identity' >> /etc/audit/rules.d/audit.rules
+echo '-w /etc/gshadow -p wa -k identity' >> /etc/audit/rules.d/audit.rules
+echo '-w /etc/passwd -p wa -k identity' >> /etc/audit/rules.d/audit.rules
+echo '-w /etc/security/opasswd -p wa -k identity' >> /etc/audit/rules.d/audit.rules
+echo '-w /etc/shadow -p wa -k identity' >> /etc/audit/rules.d/audit.rules
+
+
 
 
 
