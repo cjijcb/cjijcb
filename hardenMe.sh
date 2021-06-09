@@ -208,8 +208,21 @@ sysctl -w net.ipv6.conf.all.accept_redirects=0;
 sysctl -w net.ipv6.conf.default.accept_redirects=0;
 sysctl -w net.ipv4.route.flush=1
 sysctl -w net.ipv6.route.flush=1
+#5099 !reboot
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+iptables -A INPUT -s 127.0.0.0/8 -j DROP
+#5100 !reboot
+ip6tables -P INPUT DROP 
+ip6tables -P OUTPUT DROP 
+ip6tables -P FORWARD DROP
+#5101 !reboot
+ip6tables -A INPUT -i lo -j ACCEPT
+ip6tables -A OUTPUT -o lo -j ACCEPT
+ip6tables -A INPUT -s ::1 -j DROP
+#5028
+echo '  *  *  *  *  12 aide' >> /etc/crontab
 #
-
 
 
 
