@@ -192,7 +192,10 @@ ip6tables -F
 #5164
 grep -q 'password.*requisite.*pam_pwquality.*so.*remember=' /etc/pam.d/system-auth || sed -i -E 's/^(password.*requisite.*pam_pwquality.*so.)(.*)(remember=|.*)/\1\2 remember=5/' /etc/pam.d/system-auth
 grep -q 'password.*sufficient.*pam_unix.*so.*remember=' /etc/pam.d/system-auth || sed -i -E 's/^(password.*sufficient.*pam_unix.*so.)(.*)(remember=|.*)/\1\2 remember=5/' /etc/pam.d/system-auth
-
+#5163
+sed -i "$(grep -n '^auth' /etc/pam.d/system-auth | tail -1 | cut -f1 -d:) a auth\trequired\tpam_faillock.so deny=5 unlock_time=900" /etc/pam.d/system-auth
+sed -i "$(grep -n '^auth' /etc/pam.d/password-auth | tail -1 | cut -f1 -d:) a auth\trequired\tpam_faillock.so deny=5 unlock_time=900" /etc/pam.d/password-auth
+#
 
 
 
