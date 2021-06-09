@@ -237,8 +237,12 @@ sed -i -E  's/^#?PASS_MAX_DAYS.*/PASS_MAX_DAYS\t365/' /etc/login.defs
 sed  -i -E 's/^#?PASS_MIN_DAYS.*/PASS_MIN_DAYS\t7/' /etc/login.defs
 #5168
 sed -i -E  's/^#?PASS_WARN_AGE.*/PASS_WARN_AGE\t7/' /etc/login.defs
+#5172
+sed -i -E 's/umask[[:space:]]+[[:digit:]]+/umask 027/' /etc/profile.d/*.sh
+sed -i -E 's/umask[[:space:]]+[[:digit:]]+/umask 288/' /etc/profile
+sed -i -E 's/umask[[:space:]]+[[:digit:]]+/umask 288/' /etc/bashrc
+sed -i -E 's/UMASK[[:space:]]+[[:digit:]]+/UMASK\t\t288/' /etc/login.defs
 #
-
 
 
 
