@@ -28,6 +28,9 @@ echo 'Compress=yes' >> /etc/systemd/journald.conf &&
 echo 'Storage=persistent' >>/etc/systemd/journald.conf &&
 #5132 !reboot 
 find /var/log -type f -exec chmod g-wx,o-rwx {} +
+echo '#cis_5132' >> /etc/rc.local
+echo 'find /var/log -type f -exec chmod g-wx,o-rwx {} +' >> /etc/rc.local
+chmod +x /etc/rc.d/rc.local
 #5143
 find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chown root:root {} \;
 find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chmod 0600 {} \; 
@@ -44,8 +47,12 @@ useradd -D -f 30 &&
 #5173
 echo 'auth required pam_wheel.so use_uid' >> /etc/pam.d/su &&
 #5178 !reboot
-chown root:root /etc/passwd- &&
-chmod 600 /etc/passwd- &&
+chown root:root /etc/passwd-
+chmod 600 /etc/passwd-
+echo '#cis_5178' >> /etc/rc.local
+echo 'chown root:root /etc/passwd-' >> /etc/rc.local
+echo 'chmod 600 /etc/passwd-' >> /etc/rc.local
+chmod +x /etc/rc.d/rc.local
 #5108
 grep -q 'GRUB_CMDLINE_LINUX.*audit_backlog_limit=' /etc/default/grub || sed -i -E 's/^(GRUB_CMDLINE_LINUX)(.*)(audit_backlog_limit=|.*)\"/\1\2 audit_backlog_limit=8192"/' /etc/default/grub &&
 grub2-mkconfig -o /boot/grub2/grub.cfg &&
@@ -186,9 +193,9 @@ echo '-w /sbin/rmmod -p x -k modules' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b64 -S init_module -S delete_module -k modules' >> /etc/audit/rules.d/audit.rules
 #5027
 yum -y install aide
-#5093 !reboot
-iptables -F
-ip6tables -F
+#5093 !reboot !disabled
+#~~~iptables -F
+#~~~ip6tables -F
 #5164
 grep -q 'password.*requisite.*pam_pwquality.*so.*remember=' /etc/pam.d/system-auth || sed -i -E 's/^(password.*requisite.*pam_pwquality.*so.)(.*)(remember=|.*)/\1\2 remember=5/' /etc/pam.d/system-auth
 grep -q 'password.*sufficient.*pam_unix.*so.*remember=' /etc/pam.d/system-auth || sed -i -E 's/^(password.*sufficient.*pam_unix.*so.)(.*)(remember=|.*)/\1\2 remember=5/' /etc/pam.d/system-auth
@@ -212,14 +219,29 @@ sysctl -w net.ipv6.route.flush=1
 iptables -A INPUT -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
 iptables -A INPUT -s 127.0.0.0/8 -j DROP
+echo '#cis_5099' >> /etc/rc.local
+echo 'iptables -A INPUT -i lo -j ACCEPT' >> /etc/rc.local
+echo 'iptables -A OUTPUT -o lo -j ACCEPT' >> /etc/rc.local
+echo 'iptables -A INPUT -s 127.0.0.0/8 -j DROP' >> /etc/rc.local
+chmod +x /etc/rc.d/rc.local
 #5100 !reboot
 ip6tables -P INPUT DROP 
 ip6tables -P OUTPUT DROP 
 ip6tables -P FORWARD DROP
+echo '#cis_5100' >> /etc/rc.local
+echo 'ip6tables -P INPUT DROP' >> /etc/rc.local
+echo 'ip6tables -P OUTPUT DROP ' >> /etc/rc.local
+echo 'ip6tables -P FORWARD DROP' >> /etc/rc.local
+chmod +x /etc/rc.d/rc.local
 #5101 !reboot
 ip6tables -A INPUT -i lo -j ACCEPT
 ip6tables -A OUTPUT -o lo -j ACCEPT
 ip6tables -A INPUT -s ::1 -j DROP
+echo '#cis_5101' >> /etc/rc.local
+echo 'ip6tables -A INPUT -i lo -j ACCEPT' >> /etc/rc.local
+echo 'ip6tables -A OUTPUT -o lo -j ACCEPT' >> /etc/rc.local
+echo 'ip6tables -A INPUT -s ::1 -j DROP' >> /etc/rc.local
+chmod +x /etc/rc.d/rc.local
 #5028
 echo '  *  *  *  *  12 aide' >> /etc/crontab
 #5004
@@ -229,8 +251,16 @@ sed -i 's/^Options=.*/Options=mode=1777,strictatime,noexec,nodev,nosuid/' /etc/s
 #5160
 authselect create-profile custom-profile -b nis --symlink-meta
 authselect select custom/custom-profile --force
+grep -q 'password.*requisite.*pam_pwquality.*so.*remember=' /etc/pam.d/system-auth || sed -i -E 's/^(password.*requisite.*pam_pwquality.*so.)(.*)(remember=|.*)/\1\2 remember=5/' /etc/pam.d/system-auth
+grep -q 'password.*sufficient.*pam_unix.*so.*remember=' /etc/pam.d/system-auth || sed -i -E 's/^(password.*sufficient.*pam_unix.*so.)(.*)(remember=|.*)/\1\2 remember=5/' /etc/pam.d/system-auth
+sed -i "$(grep -n '^auth' /etc/pam.d/system-auth | tail -1 | cut -f1 -d:) a auth\trequired\tpam_faillock.so deny=5 unlock_time=900" /etc/pam.d/system-auth
+sed -i "$(grep -n '^auth' /etc/pam.d/password-auth | tail -1 | cut -f1 -d:) a auth\trequired\tpam_faillock.so deny=5 unlock_time=900" /etc/pam.d/password-auth
 #5161
 authselect select custom/custom-profile with-faillock --force
+grep -q 'password.*requisite.*pam_pwquality.*so.*remember=' /etc/pam.d/system-auth || sed -i -E 's/^(password.*requisite.*pam_pwquality.*so.)(.*)(remember=|.*)/\1\2 remember=5/' /etc/pam.d/system-auth
+grep -q 'password.*sufficient.*pam_unix.*so.*remember=' /etc/pam.d/system-auth || sed -i -E 's/^(password.*sufficient.*pam_unix.*so.)(.*)(remember=|.*)/\1\2 remember=5/' /etc/pam.d/system-auth
+sed -i "$(grep -n '^auth' /etc/pam.d/system-auth | tail -1 | cut -f1 -d:) a auth\trequired\tpam_faillock.so deny=5 unlock_time=900" /etc/pam.d/system-auth
+sed -i "$(grep -n '^auth' /etc/pam.d/password-auth | tail -1 | cut -f1 -d:) a auth\trequired\tpam_faillock.so deny=5 unlock_time=900" /etc/pam.d/password-auth
 #5166
 sed -i -E  's/^#?PASS_MAX_DAYS.*/PASS_MAX_DAYS\t365/' /etc/login.defs
 #5167
@@ -239,10 +269,37 @@ sed  -i -E 's/^#?PASS_MIN_DAYS.*/PASS_MIN_DAYS\t7/' /etc/login.defs
 sed -i -E  's/^#?PASS_WARN_AGE.*/PASS_WARN_AGE\t7/' /etc/login.defs
 #5172
 sed -i -E 's/umask[[:space:]]+[[:digit:]]+/umask 027/' /etc/profile.d/*.sh
-sed -i -E 's/umask[[:space:]]+[[:digit:]]+/umask 288/' /etc/profile
-sed -i -E 's/umask[[:space:]]+[[:digit:]]+/umask 288/' /etc/bashrc
-sed -i -E 's/UMASK[[:space:]]+[[:digit:]]+/UMASK\t\t288/' /etc/login.defs
+sed -i -E 's/umask[[:space:]]+[[:digit:]]+/umask 027/' /etc/profile
+sed -i -E 's/umask[[:space:]]+[[:digit:]]+/umask 027/' /etc/bashrc
+sed -i -E 's/UMASK[[:space:]]+[[:digit:]]+/UMASK\t\t027/' /etc/login.defs
+#5143
+find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chown root:root {} \;
+find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chmod 0600 {} \;
+#5146
+sed -i -E 's/^#?X11Forwarding.*/X11Forwarding no/' /etc/ssh/sshd_config
+#5147
+sed -i -E 's/^#?MaxAuthTries.*/MaxAuthTries 3/' /etc/ssh/sshd_config
+#5134
+chown root:root /etc/crontab
+chmod og-rwx /etc/crontab
+#5135
+chown root:root /etc/cron.hourly
+chmod og-rwx /etc/cron.hourly
+#5136
+chown root:root /etc/cron.daily
+chmod og-rwx /etc/cron.daily
+#5137
+chown root:root /etc/cron.weekly
+chmod og-rwx /etc/cron.weekly
+#5138
+chown root:root /etc/cron.monthly
+chmod og-rwx /etc/cron.monthly
+#5139
+chown root:root /etc/cron.d
+chmod og-rwx /etc/cron.d
 #
+
+
 
 
 
