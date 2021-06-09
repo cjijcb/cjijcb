@@ -26,7 +26,7 @@ echo '-e 2' >> /etc/audit/rules.d/99-finalize.rules &&
 echo 'Compress=yes' >> /etc/systemd/journald.conf &&
 #5131
 echo 'Storage=persistent' >>/etc/systemd/journald.conf &&
-#5132
+#5132 !reboot 
 find /var/log -type f -exec chmod g-wx,o-rwx {} +
 #5143
 find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chown root:root {} \;
@@ -43,7 +43,7 @@ sed -i 's/.*PASS_MIN_DAYS.*/PASS_MIN_DAYS\t7/' /etc/login.defs &&
 useradd -D -f 30 &&
 #5173
 echo 'auth required pam_wheel.so use_uid' >> /etc/pam.d/su &&
-#5178
+#5178 !reboot
 chown root:root /etc/passwd- &&
 chmod 600 /etc/passwd- &&
 #5108
@@ -70,7 +70,7 @@ sed -i 's/.*Storage=.*/Storage=none/' /etc/systemd/coredump.conf
 sed -i 's/.*ProcessSizeMax.*/ProcessSizeMax=0/' /etc/systemd/coredump.conf 
 systemctl daemon-reload
 #5050
-update-crypto-policies --set FUTURE
+update-crypto-policies --set FIPS
 #5097
 systemctl --now enable nftables
 #5075
@@ -163,9 +163,35 @@ echo '-w /etc/gshadow -p wa -k identity' >> /etc/audit/rules.d/audit.rules
 echo '-w /etc/passwd -p wa -k identity' >> /etc/audit/rules.d/audit.rules
 echo '-w /etc/security/opasswd -p wa -k identity' >> /etc/audit/rules.d/audit.rules
 echo '-w /etc/shadow -p wa -k identity' >> /etc/audit/rules.d/audit.rules
-
-
-
+#5121
+echo '#cis_5121' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts' >> /etc/audit/rules.d/audit.rules
+#5052
+yum -y install chrony
+#5119
+echo '#cis_5119' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access' >> /etc/audit/rules.d/audit.rules
+#5122
+echo '-a always,exit -F arch=b32 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete' >> /etc/audit/rules.d/audit.rules
+#5123
+echo '#cis_5123' >> /etc/audit/rules.d/audit.rules
+echo '-w /sbin/insmod -p x -k modules' >> /etc/audit/rules.d/audit.rules
+echo '-w /sbin/modprobe -p x -k modules' >> /etc/audit/rules.d/audit.rules
+echo '-w /sbin/rmmod -p x -k modules' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S init_module -S delete_module -k modules' >> /etc/audit/rules.d/audit.rules
+#5027
+yum -y install aide
+#5093
+iptables -F
+ip6tables -F
+#5164
+grep -q 'password.*requisite.*pam_pwquality.*so.*remember=' /etc/pam.d/system-auth || sed -i -E 's/^(password.*requisite.*pam_pwquality.*so.)(.*)(remember=|.*)/\1\2 remember=5/' /etc/pam.d/system-auth
+grep -q 'password.*sufficient.*pam_unix.*so.*remember=' /etc/pam.d/system-auth || sed -i -E 's/^(password.*sufficient.*pam_unix.*so.)(.*)(remember=|.*)/\1\2 remember=5/' /etc/pam.d/system-auth
 
 
 
