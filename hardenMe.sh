@@ -186,7 +186,7 @@ echo '-w /sbin/rmmod -p x -k modules' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b64 -S init_module -S delete_module -k modules' >> /etc/audit/rules.d/audit.rules
 #5027
 yum -y install aide
-#5093
+#5093 !reboot
 iptables -F
 ip6tables -F
 #5164
@@ -195,7 +195,21 @@ grep -q 'password.*sufficient.*pam_unix.*so.*remember=' /etc/pam.d/system-auth |
 #5163
 sed -i "$(grep -n '^auth' /etc/pam.d/system-auth | tail -1 | cut -f1 -d:) a auth\trequired\tpam_faillock.so deny=5 unlock_time=900" /etc/pam.d/system-auth
 sed -i "$(grep -n '^auth' /etc/pam.d/password-auth | tail -1 | cut -f1 -d:) a auth\trequired\tpam_faillock.so deny=5 unlock_time=900" /etc/pam.d/password-auth
+#5162
+echo 'minlen = 14' >> /etc/security/pwquality.conf
+#5077
+grep -E -q 'net.ipv4.conf.all.accept_redirects[[:space:]]*=[[:space:]]*' /etc/sysctl.conf || echo 'net.ipv4.conf.all.accept_redirects=0' >> /etc/sysctl.conf
+grep -E -q 'net.ipv4.conf.default.accept_redirects[[:space:]]*=[[:space:]]*' /etc/sysctl.conf || echo 'net.ipv4.conf.default.accept_redirects=0' >> /etc/sysctl.conf
+grep -E -q 'net.ipv6.conf.all.accept_redirects[[:space:]]*=[[:space:]]*' /etc/sysctl.conf || echo 'net.ipv6.conf.all.accept_redirects=0' >> /etc/sysctl.conf
+grep -E -q 'net.ipv6.conf.default.accept_redirects[[:space:]]*=[[:space:]]*' /etc/sysctl.conf || echo 'net.ipv6.conf.default.accept_redirects=0' >> /etc/sysctl.conf
+sysctl -w net.ipv4.conf.all.accept_redirects=0
+sysctl -w net.ipv4.conf.default.accept_redirects=0;
+sysctl -w net.ipv6.conf.all.accept_redirects=0;
+sysctl -w net.ipv6.conf.default.accept_redirects=0;
+sysctl -w net.ipv4.route.flush=1
+sysctl -w net.ipv6.route.flush=1
 #
+
 
 
 
