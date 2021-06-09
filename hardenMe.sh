@@ -1,31 +1,38 @@
 #!/bin/bash
+#preQ
+systemctl stop firewalld
+systemctl disable firewalld
+systemctl mask firewalld
+yum -y install iptables-services
+systemctl daemon-reload
+systemctl start iptables
 #5000
-echo 'install cramfs /bin/true' >> /etc/modprobe.d/hardening.conf &&
+echo 'install cramfs /bin/true' >> /etc/modprobe.d/hardening.conf
 #5001
-echo 'install vfat /bin/true' >> /etc/modprobe.d/hardening.conf &&
+echo 'install vfat /bin/true' >> /etc/modprobe.d/hardening.conf
 #5002
-echo 'install squashfs /bin/true' >>  /etc/modprobe.d/hardening.conf &&
+echo 'install squashfs /bin/true' >>  /etc/modprobe.d/hardening.conf
 #5003 
-echo 'install udf /bin/true' >> /etc/modprobe.d/hardening.conf &&
+echo 'install udf /bin/true' >> /etc/modprobe.d/hardening.conf
 #5025
-echo 'Defaults use_pty' >>  /etc/sudoers &&
+echo 'Defaults use_pty' >>  /etc/sudoers
 #5026
-mkdir /var/log/sudoers &&
-echo 'Defaults logfile=/var/log/sudoers' >>  /etc/sudoers &&
+mkdir /var/log/sudoers
+echo 'Defaults logfile=/var/log/sudoers' >>  /etc/sudoers
 #5029
-chown root:root /boot/grub2/grub.cfg &&
-chmod og-rwx /boot/grub2/grub.cfg &&
-chown root:root /boot/grub2/grubenv &&
-chmod og-rwx /boot/grub2/grubenv &&
+chown root:root /boot/grub2/grub.cfg
+chmod og-rwx /boot/grub2/grub.cfg
+chown root:root /boot/grub2/grubenv
+chmod og-rwx /boot/grub2/grubenv
 #5107
-grep -q 'GRUB_CMDLINE_LINUX.*audit=1' /etc/default/grub || sed -i -E 's/^(GRUB_CMDLINE_LINUX)(.*)(audit=1|.*)\"/\1\2 audit=1"/' /etc/default/grub &&
-grub2-mkconfig -o /boot/grub2/grub.cfg &&
+grep -q 'GRUB_CMDLINE_LINUX.*audit=1' /etc/default/grub || sed -i -E 's/^(GRUB_CMDLINE_LINUX)(.*)(audit=1|.*)\"/\1\2 audit=1"/' /etc/default/grub
+grub2-mkconfig -o /boot/grub2/grub.cfg
 #5125
-echo '-e 2' >> /etc/audit/rules.d/99-finalize.rules &&
+echo '-e 2' >> /etc/audit/rules.d/99-finalize.rules
 #5130
-echo 'Compress=yes' >> /etc/systemd/journald.conf &&
+echo 'Compress=yes' >> /etc/systemd/journald.conf
 #5131
-echo 'Storage=persistent' >>/etc/systemd/journald.conf &&
+echo 'Storage=persistent' >>/etc/systemd/journald.conf
 #5132 !reboot 
 find /var/log -type f -exec chmod g-wx,o-rwx {} +
 echo '#cis_5132' >> /etc/rc.local
@@ -35,17 +42,17 @@ chmod +x /etc/rc.d/rc.local
 find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chown root:root {} \;
 find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chmod 0600 {} \; 
 #5154
-sed -i 's/.*LoginGraceTime.*/LoginGraceTime 60/' /etc/ssh/sshd_config &&
+sed -i 's/.*LoginGraceTime.*/LoginGraceTime 60/' /etc/ssh/sshd_config
 #5155
-sed -i 's/.*Banner.*/Banner \/etc\/issue.net/' /etc/ssh/sshd_config &&
+sed -i 's/.*Banner.*/Banner \/etc\/issue.net/' /etc/ssh/sshd_config
 #5166
-sed -i 's/.*PASS_MAX_DAYS.*/PASS_MAX_DAYS\t365/' /etc/login.defs &&
+sed -i 's/.*PASS_MAX_DAYS.*/PASS_MAX_DAYS\t365/' /etc/login.defs
 #5167
-sed -i 's/.*PASS_MIN_DAYS.*/PASS_MIN_DAYS\t7/' /etc/login.defs &&
+sed -i 's/.*PASS_MIN_DAYS.*/PASS_MIN_DAYS\t7/' /etc/login.defs
 #5169
-useradd -D -f 30 &&
+useradd -D -f 30
 #5173
-echo 'auth required pam_wheel.so use_uid' >> /etc/pam.d/su &&
+echo 'auth required pam_wheel.so use_uid' >> /etc/pam.d/su
 #5178 !reboot
 chown root:root /etc/passwd-
 chmod 600 /etc/passwd-
@@ -54,8 +61,8 @@ echo 'chown root:root /etc/passwd-' >> /etc/rc.local
 echo 'chmod 600 /etc/passwd-' >> /etc/rc.local
 chmod +x /etc/rc.d/rc.local
 #5108
-grep -q 'GRUB_CMDLINE_LINUX.*audit_backlog_limit=' /etc/default/grub || sed -i -E 's/^(GRUB_CMDLINE_LINUX)(.*)(audit_backlog_limit=|.*)\"/\1\2 audit_backlog_limit=8192"/' /etc/default/grub &&
-grub2-mkconfig -o /boot/grub2/grub.cfg &&
+grep -q 'GRUB_CMDLINE_LINUX.*audit_backlog_limit=' /etc/default/grub || sed -i -E 's/^(GRUB_CMDLINE_LINUX)(.*)(audit_backlog_limit=|.*)\"/\1\2 audit_backlog_limit=8192"/' /etc/default/grub
+grub2-mkconfig -o /boot/grub2/grub.cfg
 #5110
 sed -i 's/.*max_log_file_action.*/max_log_file_action = keep_logs/' /etc/audit/auditd.conf
 #5111
@@ -146,9 +153,9 @@ sed -i '1 i readonly TMOUT=900 2> /dev/null ; export TMOUT' /etc/profile
 sed -i '1 i readonly TMOUT=900 2> /dev/null ; export TMOUT' /etc/bashrc
 #5102
 nmcli radio all off
-#5103
-grep -q 'GRUB_CMDLINE_LINUX.*ipv6.disable=' /etc/default/grub || sed -i -E 's/^(GRUB_CMDLINE_LINUX)(.*)(ipv6.disable=1|.*)\"/\1\2 ipv6.disable=1"/' /etc/default/grub
-grub2-mkconfig -o /boot/grub2/grub.cfg
+#5103 !disabled
+#~~~grep -q 'GRUB_CMDLINE_LINUX.*ipv6.disable=' /etc/default/grub || sed -i -E 's/^(GRUB_CMDLINE_LINUX)(.*)(ipv6.disable=1|.*)\"/\1\2 ipv6.disable=1"/' /etc/default/grub
+#~~~grub2-mkconfig -o /boot/grub2/grub.cfg
 #5115
 echo '-a always,exit -F arch=b32 -S adjtimex -S settimeofday -S stime -k time-change' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b32 -S clock_settime -k time-change' >> /etc/audit/rules.d/audit.rules
@@ -297,29 +304,3 @@ chmod og-rwx /etc/cron.monthly
 #5139
 chown root:root /etc/cron.d
 chmod og-rwx /etc/cron.d
-#
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
