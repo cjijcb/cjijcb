@@ -222,9 +222,14 @@ ip6tables -A OUTPUT -o lo -j ACCEPT
 ip6tables -A INPUT -s ::1 -j DROP
 #5028
 echo '  *  *  *  *  12 aide' >> /etc/crontab
+#5004
+systemctl unmask tmp.mount
+systemctl enable tmp.mount
+sed -i 's/^Options=.*/Options=mode=1777,strictatime,noexec,nodev,nosuid/' /etc/systemd/system/local-fs.target.wants/tmp.mount
+#5160
+authselect create-profile custom-profile -b nis --symlink-meta
+authselect select custom/custom-profile --force
 #
-
-
 
 
 
