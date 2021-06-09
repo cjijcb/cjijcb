@@ -135,7 +135,7 @@ echo '-w /var/log/sudo.log -p wa -k actions' >>  /etc/audit/rules.d/audit.rules
 #5127
 sed -i '1 i\\$FileCreateMode 0640' /etc/rsyslog.conf
 #5170
-sed -i '1 i/readonly TMOUT=900 2> /dev/null ; export TMOUT' /etc/profile
+sed -i '1 i readonly TMOUT=900 2> /dev/null ; export TMOUT' /etc/profile
 sed -i '1 i readonly TMOUT=900 2> /dev/null ; export TMOUT' /etc/bashrc
 #5102
 nmcli radio all off
