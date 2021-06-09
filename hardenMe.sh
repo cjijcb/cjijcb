@@ -229,7 +229,10 @@ sed -i 's/^Options=.*/Options=mode=1777,strictatime,noexec,nodev,nosuid/' /etc/s
 #5160
 authselect create-profile custom-profile -b nis --symlink-meta
 authselect select custom/custom-profile --force
+#5161
+authselect select custom/custom-profile with-faillock --force
 #
+
 
 
 
