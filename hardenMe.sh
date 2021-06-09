@@ -231,7 +231,14 @@ authselect create-profile custom-profile -b nis --symlink-meta
 authselect select custom/custom-profile --force
 #5161
 authselect select custom/custom-profile with-faillock --force
+#5166
+sed -i -E  's/^#?PASS_MAX_DAYS.*/PASS_MAX_DAYS\t365/' /etc/login.defs
+#5167
+sed  -i -E 's/^#?PASS_MIN_DAYS.*/PASS_MIN_DAYS\t7/' /etc/login.defs
+#5168
+sed -i -E  's/^#?PASS_WARN_AGE.*/PASS_WARN_AGE\t7/' /etc/login.defs
 #
+
 
 
 
