@@ -255,6 +255,8 @@ systemctl unmask tmp.mount
 systemctl enable tmp.mount
 sed -i 's/^Options=.*/Options=mode=1777,strictatime,noexec,nodev,nosuid/' /etc/systemd/system/local-fs.target.wants/tmp.mount
 systemctl start tmp.mount
+echo '#cis_5004' >> /etc/rc.local
+echo 'systemctl start tmp.mount' >> /etc/rc.local
 #5160
 authselect create-profile custom-profile -b nis --symlink-meta
 authselect select custom/custom-profile --force
