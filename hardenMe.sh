@@ -257,6 +257,7 @@ sed -i 's/^Options=.*/Options=mode=1777,strictatime,noexec,nodev,nosuid/' /etc/s
 systemctl start tmp.mount
 echo '#cis_5004' >> /etc/rc.local
 echo 'systemctl start tmp.mount' >> /etc/rc.local
+chmod +x /etc/rc.d/rc.local
 #5160
 authselect create-profile custom-profile -b nis --symlink-meta
 authselect select custom/custom-profile --force
@@ -323,6 +324,9 @@ sysctl -w net.ipv4.route.flush=1
 #5019
 echo 'tmpfs /dev/shm tmpfs defaults,nodev,nosuid,noexec 0 0' >> /etc/fstab
 mount -o remount,noexec /dev/shm
-#5007
+#5007 !reboot
 echo 'tmpfs /dev/shm tmpfs defaults,nodev,nosuid,noexec 0 0' >> /etc/fstab
 mount -o remount,noexec /tmp
+echo 'mount -o remount,noexec /tmp' >> /etc/rc.local
+chmod +x /etc/rc.d/rc.local
+ 
