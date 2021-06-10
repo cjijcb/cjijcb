@@ -113,9 +113,8 @@ sysctl -w net.ipv6.route.flush=1
 #5140
 rm -f /etc/cron.deny 
 rm -f /etc/at.deny
-touch /etc/cron.allo
+touch /etc/cron.allow
 touch /etc/at.allow
-chmod og-rwx
 chmod og-rwx /etc/cron.allow
 chmod og-rwx /etc/at.allow
 chown root:root /etc/cron.allow
@@ -149,8 +148,8 @@ echo '-w /var/log/sudo.log -p wa -k actions' >>  /etc/audit/rules.d/audit.rules
 #5127
 sed -i '1 i\\$FileCreateMode 0640' /etc/rsyslog.conf
 #5170
-sed -i '1 i readonly TMOUT=900 2> /dev/null ; export TMOUT' /etc/profile
-sed -i '1 i readonly TMOUT=900 2> /dev/null ; export TMOUT' /etc/bashrc
+sed -i '1 i readonly TMOUT=900; export TMOUT' /etc/profile
+sed -i '1 i readonly TMOUT=90; export TMOUT' /etc/bashrc
 #5102
 nmcli radio all off
 #5103 !disabled
@@ -255,6 +254,7 @@ echo '  *  *  *  *  12 aide' >> /etc/crontab
 systemctl unmask tmp.mount
 systemctl enable tmp.mount
 sed -i 's/^Options=.*/Options=mode=1777,strictatime,noexec,nodev,nosuid/' /etc/systemd/system/local-fs.target.wants/tmp.mount
+systemctl start tmp.mount
 #5160
 authselect create-profile custom-profile -b nis --symlink-meta
 authselect select custom/custom-profile --force
@@ -304,3 +304,27 @@ chmod og-rwx /etc/cron.monthly
 #5139
 chown root:root /etc/cron.d
 chmod og-rwx /etc/cron.d
+#5021
+echo 'install usb-storage /bin/true' >> /etc/modprobe.d/hardening.conf
+#5088
+echo 'install tipc /bin/true' >> /etc/modprobe.d/hardening.conf
+#5157
+sed -i -E 's/^#?AllowTcpForwarding.*/AllowTcpForwarding no/' /etc/ssh/sshd_config
+#5158
+sed -i -E 's/^#?MaxSessions.*/MaxSessions 2/' /etc/ssh/sshd_config
+#5079
+echo 'net.ipv4.conf.all.log_martians = 1' >>  /etc/sysctl.conf
+echo 'net.ipv4.conf.default.log_martians = 1' >>  /etc/sysctl.conf
+sysctl -w net.ipv4.conf.all.log_martians=1;
+sysctl -w net.ipv4.conf.default.log_martians=1
+sysctl -w net.ipv4.route.flush=1
+#5019
+echo 'tmpfs /dev/shm tmpfs defaults,nodev,nosuid,noexec 0 0' >> /etc/fstab
+mount -o remount,noexec /dev/shm
+#5007
+echo 'tmpfs /dev/shm tmpfs defaults,nodev,nosuid,noexec 0 0' >> /etc/fstab
+mount -o remount,noexec /tmp
+#
+
+
+
