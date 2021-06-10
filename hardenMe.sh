@@ -324,7 +324,3 @@ mount -o remount,noexec /dev/shm
 #5007
 echo 'tmpfs /dev/shm tmpfs defaults,nodev,nosuid,noexec 0 0' >> /etc/fstab
 mount -o remount,noexec /tmp
-#
-
-
-
