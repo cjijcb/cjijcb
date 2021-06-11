@@ -246,6 +246,8 @@ yum -y install rsyslog
 systemctl enable rsyslog
 #5127 !rsyslog
 sed -i '1 i\\$FileCreateMode 0640' /etc/rsyslog.conf
+#5128 !rsyslog
+echo '*.* @@127.0.0.1' >> /etc/rsyslog.conf
 #5129
 echo 'ForwardToSyslog=yes' >>  /etc/systemd/journald.conf
 #5130
