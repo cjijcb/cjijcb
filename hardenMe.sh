@@ -70,7 +70,7 @@ update-crypto-policies --set FIPS
 #5052
 yum -y install chrony
 #5054
-yum remove xorg-x11*
+yum -y remove xorg-x11*
 #5065
 systemctl stop rpcbind
 systemctl disable rpcbind
