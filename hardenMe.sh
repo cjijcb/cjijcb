@@ -32,6 +32,8 @@ echo 'tmpfs /dev/shm tmpfs defaults,nodev,nosuid,noexec 0 0' >> /etc/fstab
 mount -o remount,noexec /dev/shm
 #5021
 echo 'install usb-storage /bin/true' >> /etc/modprobe.d/hardening.conf
+#5022
+systemctl --now disable rhnsd
 #5025
 echo 'Defaults use_pty' >>  /etc/sudoers
 #5026
@@ -133,6 +135,10 @@ echo 'install tipc /bin/true' >> /etc/modprobe.d/hardening.conf
 #5093 !reboot !disabled
 #~~~iptables -F
 #~~~ip6tables -F
+#5096 !5.1.0.0
+ip6tables -P INPUT DROP 
+ip6tables -P OUTPUT DROP 
+ip6tables -P FORWARD DROP
 #5097
 systemctl --now enable nftables
 #5099 !reboot
