@@ -56,6 +56,9 @@ systemctl daemon-reload
 #5033
 echo 'kernel.randomize_va_space = 2' >> /etc/sysctl.conf
 sysctl -w kernel.randomize_va_space=2
+#5037
+grep -E '^[[:space:]]*SELINUX[[:space:]]*=[[:space:]]*enforcing' /etc/selinux/config || sed -i -E 's/^[[:space:]]*SELINUX[[:space:]]*=.*/SELINUX=enforcing/' /etc/selinux/config
+setenforce 1
 #5042
 echo 'Authorized uses only. All activity may be monitored and reported.' > /etc/issue
 #5043
@@ -64,6 +67,16 @@ echo 'Authorized uses only. All activity may be monitored and reported.' > /etc/
 update-crypto-policies --set FIPS
 #5052
 yum -y install chrony
+#5054
+yum remove xorg-x11*
+#5065
+systemctl stop rpcbind
+systemctl disable rpcbind
+systemctl mask rpcbind
+#5072
+yum -y remove telnet
+#5073
+yum -y remove openldap-clients
 #5075
 echo 'net.ipv4.conf.all.send_redirects = 0' >> /etc/sysctl.conf
 echo 'net.ipv4.conf.default.send_redirects = 0' >> /etc/sysctl.conf
@@ -154,6 +167,8 @@ nmcli radio all off
 #5103 !disabled
 #~~~grep -q 'GRUB_CMDLINE_LINUX.*ipv6.disable=' /etc/default/grub || sed -i -E 's/^(GRUB_CMDLINE_LINUX)(.*)(ipv6.disable=1|.*)\"/\1\2 ipv6.disable=1"/' /etc/default/grub
 #~~~grub2-mkconfig -o /boot/grub2/grub.cfg
+#5104
+yum -y install rsyslog
 #5107
 grep -q 'GRUB_CMDLINE_LINUX.*audit=1' /etc/default/grub || sed -i -E 's/^(GRUB_CMDLINE_LINUX)(.*)(audit=1|.*)\"/\1\2 audit=1"/' /etc/default/grub
 grub2-mkconfig -o /boot/grub2/grub.cfg
@@ -220,7 +235,10 @@ echo '-a always,exit -F arch=b64 -S init_module -S delete_module -k modules' >> 
 echo '-w /var/log/sudo.log -p wa -k actions' >>  /etc/audit/rules.d/audit.rules
 #5125
 echo '-e 2' >> /etc/audit/rules.d/99-finalize.rules
-#5127
+#5126 !rsyslog
+yum -y install rsyslog
+systemctl enable rsyslog
+#5127 !rsyslog
 sed -i '1 i\\$FileCreateMode 0640' /etc/rsyslog.conf
 #5129
 echo 'ForwardToSyslog=yes' >>  /etc/systemd/journald.conf
@@ -239,7 +257,7 @@ chmod og-rwx /etc/crontab
 #5135
 chown root:root /etc/cron.hourly
 chmod og-rwx /etc/cron.hourly
-#5136
+#5136 !rsyslog
 chown root:root /etc/cron.daily
 chmod og-rwx /etc/cron.daily
 #5137
