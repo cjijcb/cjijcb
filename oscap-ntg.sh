@@ -12,11 +12,20 @@ echo 'Installing OpenScap'
       echo -e "${GREEN}[SUCCESS]${NC}"
 mkdir -p /var/ossec/wodles/oscap/content
 cp /usr/share/xml/scap/ssg/content/*ds.xml /var/ossec/wodles/oscap/content/
-curl -s https://raw.githubusercontent.com/cjijcb/cjijcb/main/oscap > /var/ossec/wodles/oscap/oscap
-curl -s https://raw.githubusercontent.com/cjijcb/cjijcb/main/oscap.py > /var/ossec/wodles/oscap/oscap.py
-curl -s https://raw.githubusercontent.com/cjijcb/cjijcb/main/template_xccdf.xsl > /var/ossec/wodles/oscap/template_xccdf.xsl
-curl -s https://raw.githubusercontent.com/cjijcb/cjijcb/main/template_oval.xsl > /var/ossec/wodles/oscap/template_oval.xsl
+echo 'Downloading OpenScap shell script'
+  curl -s https://raw.githubusercontent.com/cjijcb/cjijcb/main/oscap > /var/ossec/wodles/oscap/oscap && \
+    echo -e "${GREEN}[SUCCESS]${NC}"
+echo 'Downloading OpenScap python script'
+  curl -s https://raw.githubusercontent.com/cjijcb/cjijcb/main/oscap.py > /var/ossec/wodles/oscap/oscap.py && \
+    echo -e "${GREEN}[SUCCESS]${NC}"
+echo 'Downloading xccdf template'
+  curl -s https://raw.githubusercontent.com/cjijcb/cjijcb/main/template_xccdf.xsl > /var/ossec/wodles/oscap/template_xccdf.xsl && \
+    echo -e "${GREEN}[SUCCESS]${NC}"
+echo 'Downloading oval template'
+  curl -s https://raw.githubusercontent.com/cjijcb/cjijcb/main/template_oval.xsl > /var/ossec/wodles/oscap/template_oval.xsl && \
+    echo -e "${GREEN}[SUCCESS]${NC}"
 OSC_PATH='/var/ossec/etc/ossec.conf'
+echo 'Configuring Ossec'
 sed -iE '/<.*wodle.\+open-scap/,/<\/.*wodle.*>/ d' $OSC_PATH
 WDL=$( grep -n --color=never '<.*/.*wodle.*>' $OSC_PATH | tail -1  | cut -f1 -d: )
 sed -i "$WDL G; $WDL a\\
@@ -29,5 +38,6 @@ sed -i "$WDL G; $WDL a\\
     <content type=\"xccdf\" path=\"ssg-ol8-ds.xml\">\n\
       <profile>xccdf_org.ssgproject.content_profile_pci-dss<\/profile>\n\
     <\/content>\n\
-  <\/wodle>\n" $OSC_PATH
+  <\/wodle>\n" $OSC_PATH && \
+echo -e "${GREEN}[SUCCESS]${NC}"
 sed -i '/^$/N;/^\n$/D' $OSC_PATH
