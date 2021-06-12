@@ -26,10 +26,10 @@ PATTERN_HEAD = "Profiles:\n"
 PATTERN_PROFILE = "(\t+)(\S+)\n"
 PATTERN_ID_PROFILE = "\t+Id:\s(\S+)\n"
 OSCAP_LOG_ERROR = "oscap: ERROR:"
-TEMPLATE_XCCDF = "wodles/oscap/template_xccdf.xsl"
-TEMPLATE_OVAL = "wodles/oscap/template_oval.xsl"
-CONTENT_PATH = "wodles/oscap/content"
-FIFO_PATH = "wodles/oscap/oscap.fifo"
+TEMPLATE_XCCDF = "/var/ossec/wodles/oscap/template_xccdf.xsl"
+TEMPLATE_OVAL = "/var/ossec/wodles/oscap/template_oval.xsl"
+CONTENT_PATH = "/var/ossec/wodles/oscap/content"
+FIFO_PATH = "/var/ossec/wodles/oscap/oscap.fifo"
 
 def check_installed(arguments, stdin=None, stderr=None, shell=False):
 
