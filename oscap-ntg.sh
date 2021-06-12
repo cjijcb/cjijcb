@@ -13,13 +13,13 @@ OSC_PATH='/var/ossec/etc/ossec.conf'
 sed -i '/<.*wodle.+open-scap/,/<\/.*wodle.*>/ d' $OSC_PATH
 WDL=$( grep -n --color=never '<.*/.*wodle.*>' $OSC_PATH | tail -1  | cut -f1 -d: )
 sed -i "$WDL G; $WDL a\\
-  <wodle name="open-scap">\n\
+  <wodle name=\"open-scap\">\n\
     <disabled>no<\/disabled>\n\
     <timeout>1800<\/timeout>\n\
     <interval>12h<\/interval>\n\
     <scan-on-start>yes</scan-on-start>\n\
 \n\
-    <content type="xccdf" path="ssg-ol8-ds.xml">\n\
+    <content type=\"xccdf\" path=\"ssg-ol8-ds.xml\">\n\
       <profile>xccdf_org.ssgproject.content_profile_pci-dss<\/profile>\n\
     <\/content>\n\
   <\/wodle>\n" $OSC_PATH
