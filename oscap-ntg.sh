@@ -10,7 +10,7 @@ curl https://raw.githubusercontent.com/cjijcb/cjijcb/main/oscap.py > /var/ossec/
 curl https://raw.githubusercontent.com/cjijcb/cjijcb/main/template_xccdf.xsl > /var/ossec/wodles/oscap/template_xccdf.xsl
 curl https://raw.githubusercontent.com/cjijcb/cjijcb/main/template_oval.xsl > /var/ossec/wodles/oscap/template_oval.xsl
 OSC_PATH='/var/ossec/etc/ossec.conf'
-sed -iE '/<.*wodle.+open-scap/,/<\/.*wodle.*>/ d' $OSC_PATH
+sed -iE '/<.*wodle.\+open-scap/,/<\/.*wodle.*>/ d' $OSC_PATH
 WDL=$( grep -n --color=never '<.*/.*wodle.*>' $OSC_PATH | tail -1  | cut -f1 -d: )
 sed -i "$WDL G; $WDL a\\
   <wodle name=\"open-scap\">\n\
