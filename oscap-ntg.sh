@@ -10,9 +10,9 @@ curl https://raw.githubusercontent.com/cjijcb/cjijcb/main/oscap.py > /var/ossec/
 curl https://raw.githubusercontent.com/cjijcb/cjijcb/main/template_xccdf.xsl > /var/ossec/wodles/oscap/template_xccdf.xsl
 curl https://raw.githubusercontent.com/cjijcb/cjijcb/main/template_oval.xsl > /var/ossec/wodles/oscap/template_oval.xsl
 OSC_PATH='/var/ossec/etc/ossec.conf'
-sed -iE '/<.*wodle.+open-scap/,/<\/.*wodle.*>/ d' $OSC_PATH
+sed -i '/<.*wodle.+open-scap/,/<\/.*wodle.*>/ d' $OSC_PATH
 WDL=$( grep -n --color=never '<.*/.*wodle.*>' $OSC_PATH | tail -1  | cut -f1 -d: )
-sed "$WDL G; $WDL a\\
+sed -i "$WDL G; $WDL a\\
   <wodle name="open-scap">\n\
     <disabled>no<\/disabled>\n\
     <timeout>1800<\/timeout>\n\
@@ -23,4 +23,4 @@ sed "$WDL G; $WDL a\\
       <profile>xccdf_org.ssgproject.content_profile_pci-dss<\/profile>\n\
     <\/content>\n\
   <\/wodle>\n" $OSC_PATH
-sed '/^$/N;/^\n$/D' $OSC_PATH
+sed -i '/^$/N;/^\n$/D' $OSC_PATH
