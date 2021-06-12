@@ -2,12 +2,14 @@
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'
-yum -y install python3
+echo 'Installing python3'
+  yum -qy install python3 && \
+     echo -e "${GREEN}[SUCCESS]${NC}"   
 PY_PATH=$( whereis 'python3' | sed -E 's/.*[[:space:]](\/.+python3)[^.].*/\1/' )
 ln -s $PY_PATH /usr/bin/python 2> /dev/null
 echo 'Installing OpenScap'
-    yum -qy install openscap openscap-utils scap-security-guide && \
-        echo -e "${GREEN}[SUCCESS]${NC}"
+  yum -qy install openscap openscap-utils scap-security-guide && \
+      echo -e "${GREEN}[SUCCESS]${NC}"
 mkdir -p /var/ossec/wodles/oscap/content
 cp /usr/share/xml/scap/ssg/content/*ds.xml /var/ossec/wodles/oscap/content/
 curl -s https://raw.githubusercontent.com/cjijcb/cjijcb/main/oscap > /var/ossec/wodles/oscap/oscap
