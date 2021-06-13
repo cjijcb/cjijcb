@@ -41,3 +41,5 @@ sed -i "$WDL G; $WDL a\\
   <\/wodle>\n" $OSC_PATH && \
 echo -e "${GREEN}[SUCCESS]${NC}"
 sed -i '/^$/N;/^\n$/D' $OSC_PATH
+chmod +x /var/ossec/wodles/oscap/oscap
+chmod +x /var/ossec/wodles/oscap/oscap.py
