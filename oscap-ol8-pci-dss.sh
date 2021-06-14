@@ -56,7 +56,7 @@ echo '-a always,exit -F arch=b64 -S init_module -F key=modules' >> /etc/audit/ru
 echo '-a always,exit -F arch=b32 -S delete_module -F key=modules' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b64 -S delete_module -F key=modules' >> /etc/audit/rules.d/audit.rules
 #Record Attempts to Alter the localtime File
-echo '-w /etc/localtime -p wa -k audit_time_rules >> /etc/audit/rules.d/audit.rules'
+echo '-w /etc/localtime -p wa -k audit_time_rules' >> /etc/audit/rules.d/audit.rules
 #Record Attempts to Alter Time Through clock_settime
 echo '-a always,exit -F arch=b32 -S clock_settime -F a0=0x0 -F key=time-change' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b64 -S clock_settime -F a0=0x0 -F key=time-change' >> /etc/audit/rules.d/audit.rules
