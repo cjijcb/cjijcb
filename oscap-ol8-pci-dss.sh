@@ -228,7 +228,9 @@ sed -i -E 's/#?[[:space:]]*minlen.*/minlen = 8/'  /etc/security/pwquality.conf
 sed -i -E 's/#?[[:space:]]*ucredit.*/ucredit = 1/'  /etc/security/pwquality.conf
 ##!Set Lockout Time for Failed Password Attempts
 ##!Set Deny For Failed Password Attempts
-##!Limit Password Reuse	
+#Limit Password Reuse	
+grep -q 'password.*requisite.*pam_pwquality.*so.*remember=' /etc/pam.d/system-auth || sed -i -E 's/^(password.*requisite.*pam_pwquality.*so.)(.*)(remember=|.*)/\1\2 remember=5/' /etc/pam.d/system-auth
+grep -q 'password.*sufficient.*pam_unix.*so.*remember=' /etc/pam.d/system-auth || sed -i -E 's/^(password.*sufficient.*pam_unix.*so.)(.*)(remember=|.*)/\1\2 remember=5/' /etc/pam.d/system-auth
 ##!	Ensure PAM Displays Last Logon/Access Notification
 echo '05 4 * * * root /usr/sbin/aide --check' >> /etc/crontab
 #Install AIDE
