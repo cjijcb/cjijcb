@@ -42,10 +42,16 @@ echo '-a always,exit -F arch=b64 -S fchmodat -F auid>=1000 -F auid!=unset -F key
 echo "#Record Events that Modify the System's Discretionary Access Controls - lremovexattr" >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b32 -S lremovexattr -F auid>=1000 -F auid!=unset -F key=perm_mod' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b64 -S lremovexattr -F auid>=1000 -F auid!=unset -F key=perm_mod' >> /etc/audit/rules.d/audit.rules
+#Record Events that Modify the System's Discretionary Access Controls - fchmod
+echo '-a always,exit -F arch=b32 -S fchmod -F auid>=1000 -F auid!=unset -F key=perm_mod' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S fchmod -F auid>=1000 -F auid!=unset -F key=perm_mod' >> /etc/audit/rules.d/audit.rules
 #Record Events that Modify the System's Discretionary Access Controls - fchownat
 echo "#Record Events that Modify the System's Discretionary Access Controls - fchownat" >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b32 -S fchownat -F auid>=1000 -F auid!=unset -F key=perm_mod' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b64 -S fchownat -F auid>=1000 -F auid!=unset -F key=perm_mod' >> /etc/audit/rules.d/audit.rules
+#Record Events that Modify the System's Discretionary Access Controls - chown
+echo '-a always,exit -F arch=b32 -S chown -F auid>=1000 -F auid!=unset -F key=perm_mod' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S chown -F auid>=1000 -F auid!=unset -F key=perm_mod' >> /etc/audit/rules.d/audit.rules
 #Record Events that Modify the System's Discretionary Access Controls - removexattr
 echo "#Record Events that Modify the System's Discretionary Access Controls - removexattr" >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b32 -S removexattr -F auid>=1000 -F auid!=unset -F key=perm_mod' >> /etc/audit/rules.d/audit.rules
@@ -85,6 +91,8 @@ echo '-a always,exit -F arch=b64 -S adjtimex -F key=audit_time_rules' >> /etc/au
 echo "#Record attempts to alter time through settimeofday" >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b32 -S settimeofday -F key=audit_time_rules' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b64 -S settimeofday -F key=audit_time_rules' >> /etc/audit/rules.d/audit.rules
+#Record attempts to alter time through stime
+echo '-a always,exit -F arch=b32 -S stime -F key=audit_time_rules' >> /etc/audit/rules.d/audit.rules
 #Record Attempts to Alter Logon and Logout Events
 echo "#Record Attempts to Alter Logon and Logout Events" >> /etc/audit/rules.d/audit.rules
 echo '-w /var/log/tallylog -p wa -k logins -w /var/run/faillock -p wa -k logins -w /var/log/lastlog -p wa -k logins' >> /etc/audit/rules.d/audit.rules
@@ -110,42 +118,65 @@ echo '-a always,exit -F arch=b32 -S unlink -F auid>=1000 -F auid!=unset -F key=d
 echo '-a always,exit -F arch=b64 -S unlink -F auid>=1000 -F auid!=unset -F key=delete' >> /etc/audit/rules.d/audit.rules
 #Record Unsuccessful Access Attempts to Files - ftruncate
 echo "#Record Unsuccessful Access Attempts to Files - ftruncate" >> /etc/audit/rules.d/audit.rules
-echo '-a always,exit -F arch=b32 -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access -a always,exit -F arch=b32 -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
-echo '-a always,exit -F arch=b64 -S ftruncate -F exiu=-EACCES -F auid>=1000 -F auid!=unset -F key=access -a always,exit -F arch=b64 -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b32 -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b32 -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S ftruncate -F exiu=-EACCES -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
 #Record Unsuccessful Access Attempts to Files - openat
 echo "#Record Unsuccessful Access Attempts to Files - openat" >> /etc/audit/rules.d/audit.rules
-echo '-a always,exit -F arch=b32 -S openat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access -a always,exit -F arch=b32 -S openat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
-echo '-a always,exit -F arch=b64 -S openat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access -a always,exit -F arch=b64 -S openat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b32 -S openat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b32 -S openat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S openat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S openat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
 #Record Unsuccessful Access Attempts to Files - truncate
 echo "#Record Unsuccessful Access Attempts to Files - truncate" >> /etc/audit/rules.d/audit.rules
-echo '-a always,exit -F arch=b32 -S truncate -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access -a always,exit -F arch=b32 -S truncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
-echo '-a always,exit -F arch=b64 -S truncate -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access -a always,exit -F arch=b64 -S truncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b32 -S truncate -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b32 -S truncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S truncate -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S truncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
 #Record Unsuccessful Access Attempts to Files - open
 echo "#Record Unsuccessful Access Attempts to Files - open" >> /etc/audit/rules.d/audit.rules
-echo '-a always,exit -F arch=b32 -S open -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access -a always,exit -F arch=b32 -S open -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
-echo '-a always,exit -F arch=b64 -S open -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access -a always,exit -F arch=b64 -S open -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b32 -S open -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b32 -S open -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S open -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S open -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
 #Record Unsuccessful Access Attempts to Files - creat
 echo "#Record Unsuccessful Access Attempts to Files - creat" >> /etc/audit/rules.d/audit.rules
-echo '-a always,exit -F arch=b32 -S creat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access -a always,exit -F arch=b32 -S creat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access >> /etc/audit/rules.d/audit.rules' >> /etc/audit/rules.d/audit.rules
-echo '-a always,exit -F arch=b64 -S creat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access -a always,exit -F arch=b64 -S creat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access >> /etc/audit/rules.d/audit.rules' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b32 -S creat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b32 -S creat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S creat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S creat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
 #Record Unsuccessful Access Attempts to Files - open_by_handle_at
 echo "#Record Unsuccessful Access Attempts to Files - open_by_handle_at" >> /etc/audit/rules.d/audit.rules
-echo '-a always,exit -F arch=b32 -S open_by_handle_at -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access -a always,exit -F arch=b32 -S open_by_handle_at -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
-echo '-a always,exit -F arch=b64 -S open_by_handle_at -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access -a always,exit -F arch=b64 -S open_by_handle_at -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b32 -S open_by_handle_at -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b32 -S open_by_handle_at -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S open_by_handle_at -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S open_by_handle_at -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
 ##!Ensure auditd Collects Information on the Use of Privileged Commands
 #Record Events that Modify the System's Network Environment
 echo "#Record Events that Modify the System's Network Environment" >> /etc/audit/rules.d/audit.rules
-echo '-a always,exit -F arch=b32 -S sethostname,setdomainname -F key=audit_rules_networkconfig_modification -w /etc/issue -p wa -k audit_rules_networkconfig_modification -w /etc/issue.net -p wa -k audit_rules_networkconfig_modification -w /etc/hosts -p wa -k audit_rules_networkconfig_modification -w /etc/sysconfig/network -p wa -k audit_rules_networkconfig_modification' >> /etc/audit/rules.d/audit.rules
-echo '-a always,exit -F arch=b64 -S sethostname,setdomainname -F key=audit_rules_networkconfig_modification -w /etc/issue -p wa -k audit_rules_networkconfig_modification -w /etc/issue.net -p wa -k audit_rules_networkconfig_modification -w /etc/hosts -p wa -k audit_rules_networkconfig_modification -w /etc/sysconfig/network -p wa -k audit_rules_networkconfig_modification' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b32 -S sethostname,setdomainname -F key=audit_rules_networkconfig_modification' >> /etc/audit/rules.d/audit.rules
+echo '-w /etc/issue -p wa -k audit_rules_networkconfig_modification' >> /etc/audit/rules.d/audit.rules
+echo '-w /etc/issue.net -p wa -k audit_rules_networkconfig_modification' >> /etc/audit/rules.d/audit.rules
+echo '-w /etc/hosts -p wa -k audit_rules_networkconfig_modification' >> /etc/audit/rules.d/audit.rules
+echo '-w /etc/sysconfig/network -p wa -k audit_rules_networkconfig_modification' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S sethostname,setdomainname -F key=audit_rules_networkconfig_modification' >> /etc/audit/rules.d/audit.rules
+echo '-w /etc/issue -p wa -k audit_rules_networkconfig_modification' >> /etc/audit/rules.d/audit.rules
+echo '-w /etc/issue.net -p wa -k audit_rules_networkconfig_modification' >> /etc/audit/rules.d/audit.rules
+echo '-w /etc/hosts -p wa -k audit_rules_networkconfig_modification' >> /etc/audit/rules.d/audit.rules
+echo '-w /etc/sysconfig/network -p wa -k audit_rules_networkconfig_modification' >> /etc/audit/rules.d/audit.rules
 #Record Events that Modify User/Group Information - /etc/gshadow
 echo "#Record Events that Modify User/Group Information - /etc/gshadow" >> /etc/audit/rules.d/audit.rules
 echo '-w /etc/gshadow -p wa -k audit_rules_usergroup_modification' >> /etc/audit/rules.d/audit.rules
 #Ensure auditd Collects System Administrator Actions
 echo "#Ensure auditd Collects System Administrator Actions" >> /etc/audit/rules.d/audit.rules
-echo '-w /etc/sudoers -p wa -k actions -w /etc/sudoers.d/ -p wa -k actions' >> /etc/audit/rules.d/audit.rules
+echo '-w /etc/sudoers -p wa -k actions' >> /etc/audit/rules.d/audit.rules
+echo '-w /etc/sudoers.d/ -p wa -k actions' >> /etc/audit/rules.d/audit.rules
 #Record Attempts to Alter Process and Session Initiation Information
 echo "#Record Attempts to Alter Process and Session Initiation Information" >> /etc/audit/rules.d/audit.rules
-echo '-w /var/run/utmp -p wa -k session -w /var/log/btmp -p wa -k session -w /var/log/wtmp -p wa -k session' >> /etc/audit/rules.d/audit.rules
+echo '-w /var/run/utmp -p wa -k session' >> /etc/audit/rules.d/audit.rules
+echo '-w /var/log/btmp -p wa -k session' >> /etc/audit/rules.d/audit.rules
+echo '-w /var/log/wtmp -p wa -k session' >> /etc/audit/rules.d/audit.rules
 #Ensure auditd Collects Information on Exporting to Media (successful)
 echo "#Ensure auditd Collects Information on Exporting to Media (successful)" >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=unset -F key=export' >> /etc/audit/rules.d/audit.rules
