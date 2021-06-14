@@ -10,7 +10,7 @@ echo 'rotate log files frequency daily' >> /etc/logrotate.conf
 #Configure auditd admin_space_left Action on Low Disk Space
 sed -iE 's/#?[[:space:]]*admin_space_left_action.*/admin_space_left_action = ACTION/' /etc/audit/auditd.conf
 #Configure auditd space_left Action on Low Disk Space
-sed -iE 's/\bspace_left_action.*/space_left_action = ACTION/' /etc/audit/auditd.conf
+#~~~sed -iE 's/\bspace_left_action.*/space_left_action = ACTION/' /etc/audit/auditd.conf
 #Configure auditd to use audispd's syslog plugin	
 echo 'active = yes' >> /etc/audit/plugins.d/syslog.conf
 #Record Events that Modify the System's Discretionary Access Controls - chmod
