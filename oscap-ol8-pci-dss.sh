@@ -143,7 +143,7 @@ sed -iE 's/#?[[:space:]]*dcredit.*/dcredit = 1/'  /etc/security/pwquality.conf
 #Ensure PAM Enforces Password Requirements - Minimum Lowercase Characters
 sed -iE 's/#?[[:space:]]*lcredit.*/lcredit = 1/'  /etc/security/pwquality.conf
 #Ensure PAM Enforces Password Requirements - Minimum Length
-sed -E 's/#?[[:space:]]*minlen.*/minlen = 8/'  /etc/security/pwquality.conf
+sed -iE 's/#?[[:space:]]*minlen.*/minlen = 8/'  /etc/security/pwquality.conf
 #Ensure PAM Enforces Password Requirements - Minimum Uppercase Characters
 sed -iE 's/#?[[:space:]]*ucredit.*/ucredit = 1/'  /etc/security/pwquality.conf
 ##!Set Lockout Time for Failed Password Attempts
