@@ -8,9 +8,9 @@ sed -iE 's/#?[[:space:]]*ClientAliveInterval.*/ClientAliveInterval 600/' /etc/ss
 #Ensure Logrotate Runs Periodically
 echo 'rotate log files frequency daily' >> /etc/logrotate.conf
 #Configure auditd admin_space_left Action on Low Disk Space
-sed -iE 's/#?[[:space:]]*admin_space_left_action.*/admin_space_left_action = ACTION/' /etc/audit/auditd.conf
+sed -iE 's/#?[[:space:]]*admin_space_left_action.*/admin_space_left_action = SYSLOG/' /etc/audit/auditd.conf
 #Configure auditd space_left Action on Low Disk Space
-#~~~sed -iE 's/\bspace_left_action.*/space_left_action = ACTION/' /etc/audit/auditd.conf
+sed -iE 's/\bspace_left_action.*/space_left_action = SYSLOG/' /etc/audit/auditd.conf
 #Configure auditd to use audispd's syslog plugin
 echo "#Configure auditd to use audispd's syslog plugin" >> /etc/audit/rules.d/audit.rules
 echo 'active = yes' >> /etc/audit/plugins.d/syslog.conf
