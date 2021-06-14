@@ -88,7 +88,7 @@ echo '-a always,exit -F arch=b64 -S settimeofday -F key=audit_time_rules' >> /et
 #Record Attempts to Alter Logon and Logout Events
 echo "#Record Attempts to Alter Logon and Logout Events" >> /etc/audit/rules.d/audit.rules
 echo '-w /var/log/tallylog -p wa -k logins -w /var/run/faillock -p wa -k logins -w /var/log/lastlog -p wa -k logins' >> /etc/audit/rules.d/audit.rules
-#	Ensure auditd Collects File Deletion Events by User - rename
+#Ensure auditd Collects File Deletion Events by User - rename
 echo "#	Ensure auditd Collects File Deletion Events by User - rename" >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b32 -S rename -F auid>=1000 -F auid!=unset -F key=delete' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b64 -S rename -F auid>=1000 -F auid!=unset -F key=delete' >> /etc/audit/rules.d/audit.rules
