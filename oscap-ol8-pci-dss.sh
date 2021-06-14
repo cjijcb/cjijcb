@@ -13,19 +13,15 @@ sed -iE 's/#?[[:space:]]*admin_space_left_action.*/admin_space_left_action = ACT
 sed -iE 's/\bspace_left_action.*/space_left_action = ACTION/' /etc/audit/auditd.conf
 #Configure auditd to use audispd's syslog plugin	
 echo 'active = yes' >> /etc/audit/plugins.d/syslog.conf
-sudo service auditd restart
 #Record Events that Modify the System's Discretionary Access Controls - chmod
 echo '-a always,exit -F arch=b32 -S chmod -F auid>=1000 -F auid!=unset -F key=perm_mod' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b64 -S chmod -F auid>=1000 -F auid!=unset -F key=perm_mod' >> /etc/audit/rules.d/audit.rules
-sudo service auditd restart
 #Record Events that Modify the System's Discretionary Access Controls - setxattr
 echo '-a always,exit -F arch=b32 -S setxattr -F auid>=1000 -F auid!=unset -F key=perm_mod' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b64 -S setxattr -F auid>=1000 -F auid!=unset -F key=perm_mod' >> /etc/audit/rules.d/audit.rules
-sudo service auditd restart
 #Record Events that Modify the System's Discretionary Access Controls - lsetxattr
 echo '-a always,exit -F arch=b32 -S lsetxattr -F auid>=1000 -F auid!=unset -F key=perm_mod' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b64 -S lsetxattr -F auid>=1000 -F auid!=unset -F key=perm_mod' >> /etc/audit/rules.d/audit.rules
-sudo service auditd restart
 #Record Events that Modify the System's Discretionary Access Controls - lchown
 echo '-a always,exit -F arch=b32 -S lchown -F auid>=1000 -F auid!=unset -F key=perm_mod' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b64 -S lchown -F auid>=1000 -F auid!=unset -F key=perm_mod' >> /etc/audit/rules.d/audit.rules
@@ -147,9 +143,9 @@ sed -iE 's/#?[[:space:]]*dcredit.*/dcredit = 1/'  /etc/security/pwquality.conf
 #Ensure PAM Enforces Password Requirements - Minimum Lowercase Characters
 sed -iE 's/#?[[:space:]]*lcredit.*/lcredit = 1/'  /etc/security/pwquality.conf
 #Ensure PAM Enforces Password Requirements - Minimum Length
- sed -E 's/#?[[:space:]]*minlen.*/minlen = 8/'  /etc/security/pwquality.conf
+sed -E 's/#?[[:space:]]*minlen.*/minlen = 8/'  /etc/security/pwquality.conf
 #Ensure PAM Enforces Password Requirements - Minimum Uppercase Characters
-sed -E 's/#?[[:space:]]*ucredit.*/ucredit = 1/'  /etc/security/pwquality.conf
+sed -iE 's/#?[[:space:]]*ucredit.*/ucredit = 1/'  /etc/security/pwquality.conf
 ##!Set Lockout Time for Failed Password Attempts
 ##!Set Deny For Failed Password Attempts
 ##!Limit Password Reuse	
@@ -157,3 +153,5 @@ sed -E 's/#?[[:space:]]*ucredit.*/ucredit = 1/'  /etc/security/pwquality.conf
 echo '05 4 * * * root /usr/sbin/aide --check' >> /etc/crontab
 #Install AIDE
 yum -y install aide
+#
+sudo service auditd restart
