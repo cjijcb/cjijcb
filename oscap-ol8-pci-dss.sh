@@ -2,18 +2,21 @@
 #Prevent Login to Accounts With Empty Password
 sed -i 's/[[:space:]]nullok[[:space:]]/ /g' /etc/pam.d/system-auth
 #Set SSH Client Alive Count Max
-sed -iE 's/#?[[:space:]]*ClientAliveCountMax.*/ClientAliveCountMax 0/' /etc/ssh/sshd_config
+sed -i -E 's/#?[[:space:]]*ClientAliveCountMax.*/ClientAliveCountMax 0/' /etc/ssh/sshd_config
 #Set SSH Idle Timeout Interval
-sed -iE 's/#?[[:space:]]*ClientAliveInterval.*/ClientAliveInterval 600/' /etc/ssh/sshd_config
+sed -i -E 's/#?[[:space:]]*ClientAliveInterval.*/ClientAliveInterval 600/' /etc/ssh/sshd_config
 #Ensure Logrotate Runs Periodically
 echo 'rotate log files frequency daily' >> /etc/logrotate.conf
 #Configure auditd admin_space_left Action on Low Disk Space
-sed -iE 's/#?[[:space:]]*admin_space_left_action.*/admin_space_left_action = SYSLOG/' /etc/audit/auditd.conf
+sed -i -E 's/#?[[:space:]]*admin_space_left_action.*/admin_space_left_action = SYSLOG/' /etc/audit/auditd.conf
 #Configure auditd space_left Action on Low Disk Space
-sed -iE 's/\bspace_left_action.*/space_left_action = SYSLOG/' /etc/audit/auditd.conf
+sed -i -E 's/\bspace_left_action.*/space_left_action = SYSLOG/' /etc/audit/auditd.conf
 #Configure auditd to use audispd's syslog plugin
 echo "#Configure auditd to use audispd's syslog plugin" >> /etc/audit/rules.d/audit.rules
 echo 'active = yes' >> /etc/audit/plugins.d/syslog.conf
+#Enabling 
+grep -q 'GRUB_CMDLINE_LINUX.*audit=1' /etc/default/grub || sed -i -E 's/^(GRUB_CMDLINE_LINUX)(.*)(audit=1|.*)\"/\1\2 audit=1"/' /etc/default/grub
+grub2-mkconfig -o /boot/grub2/grub.cfg
 #Record Events that Modify the System's Discretionary Access Controls - chmod
 echo "#Record Events that Modify the System's Discretionary Access Controls - chmod" >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b32 -S chmod -F auid>=1000 -F auid!=unset -F key=perm_mod' >> /etc/audit/rules.d/audit.rules
@@ -95,7 +98,9 @@ echo '-a always,exit -F arch=b64 -S settimeofday -F key=audit_time_rules' >> /et
 echo '-a always,exit -F arch=b32 -S stime -F key=audit_time_rules' >> /etc/audit/rules.d/audit.rules
 #Record Attempts to Alter Logon and Logout Events
 echo "#Record Attempts to Alter Logon and Logout Events" >> /etc/audit/rules.d/audit.rules
-echo '-w /var/log/tallylog -p wa -k logins -w /var/run/faillock -p wa -k logins -w /var/log/lastlog -p wa -k logins' >> /etc/audit/rules.d/audit.rules
+echo '-w /var/log/tallylog -p wa -k logins' >> /etc/audit/rules.d/audit.rules
+echo '-w /var/run/faillock -p wa -k logins' >> /etc/audit/rules.d/audit.rules
+echo '-w /var/log/lastlog -p wa -k logins' >> /etc/audit/rules.d/audit.rules
 #Ensure auditd Collects File Deletion Events by User - rename
 echo "#	Ensure auditd Collects File Deletion Events by User - rename" >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b32 -S rename -F auid>=1000 -F auid!=unset -F key=delete' >> /etc/audit/rules.d/audit.rules
@@ -184,6 +189,9 @@ echo '-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=unset -F key=ex
 #Record Events that Modify User/Group Information - /etc/passwd
 echo "#Record Events that Modify User/Group Information - /etc/passwd" >> /etc/audit/rules.d/audit.rules
 echo '-w /etc/passwd -p wa -k audit_rules_usergroup_modification' >> /etc/audit/rules.d/audit.rules
+#Record Events that Modify User/Group Information - /etc/shadow
+echo "#Record Events that Modify User/Group Information - /etc/shadow" >> /etc/audit/rules.d/audit.rules
+echo '-w /etc/shadow -p wa -k audit_rules_usergroup_modification' >> /etc/audit/rules.d/audit.rules
 #Record Events that Modify User/Group Information - /etc/group
 echo "#Record Events that Modify User/Group Information - /etc/group" >> /etc/audit/rules.d/audit.rules
 echo '-w /etc/group -p wa -k audit_rules_usergroup_modification' >> /etc/audit/rules.d/audit.rules
@@ -204,20 +212,20 @@ sed -i 's/^INACTIVE.*/INACTIVE=60/' /etc/default/useradd
 sed -iE 's/#?PASS_MAX_DAYS.*/PASS_MAX_DAYS\t180/' /etc/login.defs
 ##!Force opensc To Use Defined Smart Card Driver
 ##!Configure opensc Smart Card Drivers
-#Enable the pcscd Service
-systemctl enable pcscd.service
 #Install the pcsc-lite package
 yum -y install pcsc-lite
+#Enable the pcscd Service
+systemctl enable pcscd.service
 #sudo yum install opensc
 yum -y install opensc
 #Ensure PAM Enforces Password Requirements - Minimum Digit Characters
-sed -iE 's/#?[[:space:]]*dcredit.*/dcredit = 1/'  /etc/security/pwquality.conf
+sed -i -E 's/#?[[:space:]]*dcredit.*/dcredit = 1/'  /etc/security/pwquality.conf
 #Ensure PAM Enforces Password Requirements - Minimum Lowercase Characters
-sed -iE 's/#?[[:space:]]*lcredit.*/lcredit = 1/'  /etc/security/pwquality.conf
+sed -i -E 's/#?[[:space:]]*lcredit.*/lcredit = 1/'  /etc/security/pwquality.conf
 #Ensure PAM Enforces Password Requirements - Minimum Length
-sed -iE 's/#?[[:space:]]*minlen.*/minlen = 8/'  /etc/security/pwquality.conf
+sed -i -E 's/#?[[:space:]]*minlen.*/minlen = 8/'  /etc/security/pwquality.conf
 #Ensure PAM Enforces Password Requirements - Minimum Uppercase Characters
-sed -iE 's/#?[[:space:]]*ucredit.*/ucredit = 1/'  /etc/security/pwquality.conf
+sed -i -E 's/#?[[:space:]]*ucredit.*/ucredit = 1/'  /etc/security/pwquality.conf
 ##!Set Lockout Time for Failed Password Attempts
 ##!Set Deny For Failed Password Attempts
 ##!Limit Password Reuse	
@@ -225,5 +233,7 @@ sed -iE 's/#?[[:space:]]*ucredit.*/ucredit = 1/'  /etc/security/pwquality.conf
 echo '05 4 * * * root /usr/sbin/aide --check' >> /etc/crontab
 #Install AIDE
 yum -y install aide
+#install libreswan package
+yum -y install libreswan
 #
 sudo service auditd restart
