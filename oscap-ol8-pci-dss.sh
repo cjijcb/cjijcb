@@ -125,7 +125,7 @@ echo '-a always,exit -F arch=b64 -S unlink -F auid>=1000 -F auid!=unset -F key=d
 echo "#Record Unsuccessful Access Attempts to Files - ftruncate" >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b32 -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b32 -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
-echo '-a always,exit -F arch=b64 -S ftruncate -F exiu=-EACCES -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
+echo '-a always,exit -F arch=b64 -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b64 -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access' >> /etc/audit/rules.d/audit.rules
 #Record Unsuccessful Access Attempts to Files - openat
 echo "#Record Unsuccessful Access Attempts to Files - openat" >> /etc/audit/rules.d/audit.rules
