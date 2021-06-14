@@ -43,5 +43,5 @@ echo -e "${GREEN}[SUCCESS]${NC}"
 sed -i '/^$/N;/^\n$/D' $OSC_PATH
 chmod +x /var/ossec/wodles/oscap/oscap
 chmod +x /var/ossec/wodles/oscap/oscap.py
-rpm -q wazuh-agent && echo 'agent.remote_conf=0' >> /var/ossec/etc/local_internal_options.conf
+rpm -q wazuh-agent 1> /dev/null 2>&1 && echo 'agent.remote_conf=0' >> /var/ossec/etc/local_internal_options.conf
 /var/ossec/bin/ossec-control restart
