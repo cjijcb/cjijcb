@@ -267,3 +267,18 @@ session\
 opensc-tool -S app:default:force_card_driver:cac
 #Configure opensc Smart Card Drivers
 opensc-tool -S app:default:card_drivers:cac
+#Specify Additional Remote NTP Server
+var_multiple_time_servers="0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org,3.pool.ntp.org"
+
+config_file="/etc/ntp.conf"
+/usr/sbin/pidof ntpd || config_file="/etc/chrony.conf"
+
+if ! [ "$(grep -c '^server' "$config_file")" -gt 1 ] ; then
+  if ! grep -q '#[[:space:]]*server' "$config_file" ; then
+    for server in $(echo "$var_multiple_time_servers" | tr ',' '\n') ; do
+      printf '\nserver %s' "$server" >> "$config_file"
+    done
+  else
+    sed -i 's/#[ \t]*server/server/g' "$config_file"
+  fi
+fi
