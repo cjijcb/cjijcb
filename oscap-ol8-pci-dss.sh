@@ -258,4 +258,10 @@ done
 #  PKG=$( rpm -qf $FILE )
 #  rpm --setperms $PKG
 #done
+#Ensure PAM Displays Last Logon/Access Notification
+sed "s/session[[:space:]]*\[default=1\][[:space:]]*pam_lastlog.so[[:space:]]*nowtmp[[:space:]].*/\
+session\
+     [default=1]\
+     pam_lastlog.so nowtmp showfailed/" /etc/pam.d/postlogin
 #
+
