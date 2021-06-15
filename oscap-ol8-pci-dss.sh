@@ -221,13 +221,13 @@ systemctl enable pcscd.service
 #sudo yum install opensc
 yum -y install opensc
 #Ensure PAM Enforces Password Requirements - Minimum Digit Characters
-sed -i -E 's/#?[[:space:]]*dcredit.*/dcredit = 1/'  /etc/security/pwquality.conf
+sed -i -E 's/#?[[:space:]]*dcredit.*/dcredit = -1/'  /etc/security/pwquality.conf
 #Ensure PAM Enforces Password Requirements - Minimum Lowercase Characters
-sed -i -E 's/#?[[:space:]]*lcredit.*/lcredit = 1/'  /etc/security/pwquality.conf
+sed -i -E 's/#?[[:space:]]*lcredit.*/lcredit = -1/'  /etc/security/pwquality.conf
 #Ensure PAM Enforces Password Requirements - Minimum Length
 sed -i -E 's/#?[[:space:]]*minlen.*/minlen = 8/'  /etc/security/pwquality.conf
 #Ensure PAM Enforces Password Requirements - Minimum Uppercase Characters
-sed -i -E 's/#?[[:space:]]*ucredit.*/ucredit = 1/'  /etc/security/pwquality.conf
+sed -i -E 's/#?[[:space:]]*ucredit.*/ucredit = -1/'  /etc/security/pwquality.conf
 ##!Set Lockout Time for Failed Password Attempts && ##!Set Deny For Failed Password Attempts
 sed -i "$(grep -n '^auth.*pam_unix.so' /etc/pam.d/system-auth  | cut -f1 -d:) i auth required pam_faillock.so preauth silent deny=5 unlock_time=1800 fail_interval=900" /etc/pam.d/system-auth
 sed -i "$(grep -n '^auth.*pam_unix.so' /etc/pam.d/system-auth  | cut -f1 -d:) a auth [default=die] pam_faillock.so authfail deny=5 unlock_time=1800 fail_interval=900" /etc/pam.d/system-auth
