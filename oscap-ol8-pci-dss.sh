@@ -8,7 +8,7 @@ sed -i -E 's/#?[[:space:]]*ClientAliveCountMax.*/ClientAliveCountMax 0/' /etc/ss
 #Set SSH Idle Timeout Interval
 sed -i -E 's/#?[[:space:]]*ClientAliveInterval.*/ClientAliveInterval 600/' /etc/ssh/sshd_config
 #Ensure Logrotate Runs Periodically
-echo 'rotate log files frequency daily' >> /etc/logrotate.conf
+sed -i -E 's/^[[:space:]]*(weekly|monthly|yearly)/daily/' /etc/logrotate.conf
 #Configure auditd admin_space_left Action on Low Disk Space
 sed -i -E 's/#?[[:space:]]*admin_space_left_action.*/admin_space_left_action = SINGLE/' /etc/audit/auditd.conf
 #Configure auditd space_left Action on Low Disk Space
