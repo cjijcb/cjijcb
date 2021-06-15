@@ -263,5 +263,7 @@ sed "s/session[[:space:]]*\[default=1\][[:space:]]*pam_lastlog.so[[:space:]]*now
 session\
      [default=1]\
      pam_lastlog.so nowtmp showfailed/" /etc/pam.d/postlogin
-#
-
+#Force opensc To Use Defined Smart Card Driver
+opensc-tool -S app:default:force_card_driver:cac
+#Configure opensc Smart Card Drivers
+opensc-tool -S app:default:card_drivers:cac
