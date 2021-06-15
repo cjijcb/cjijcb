@@ -1,4 +1,6 @@
 #!/bin/bash
+#Set Password Maximum Age
+sed -i -E 's/^#?PASS_MAX_DAYS.*/PASS_MAX_DAYS\t60/' /etc/login.defs
 #Prevent Login to Accounts With Empty Password
 sed -i 's/[[:space:]]nullok[[:space:]]/ /g' /etc/pam.d/system-auth
 #Set SSH Client Alive Count Max
@@ -8,9 +10,9 @@ sed -i -E 's/#?[[:space:]]*ClientAliveInterval.*/ClientAliveInterval 600/' /etc/
 #Ensure Logrotate Runs Periodically
 echo 'rotate log files frequency daily' >> /etc/logrotate.conf
 #Configure auditd admin_space_left Action on Low Disk Space
-sed -i -E 's/#?[[:space:]]*admin_space_left_action.*/admin_space_left_action = SYSLOG/' /etc/audit/auditd.conf
+sed -i -E 's/#?[[:space:]]*admin_space_left_action.*/admin_space_left_action = SINGLE/' /etc/audit/auditd.conf
 #Configure auditd space_left Action on Low Disk Space
-sed -i -E 's/\bspace_left_action.*/space_left_action = SYSLOG/' /etc/audit/auditd.conf
+sed -i -E 's/\bspace_left_action.*/space_left_action = SINGLE/' /etc/audit/auditd.conf
 #Configure auditd to use audispd's syslog plugin
 echo "#Configure auditd to use audispd's syslog plugin" >> /etc/audit/rules.d/audit.rules
 echo 'active = yes' >> /etc/audit/plugins.d/syslog.conf
@@ -226,8 +228,13 @@ sed -i -E 's/#?[[:space:]]*lcredit.*/lcredit = 1/'  /etc/security/pwquality.conf
 sed -i -E 's/#?[[:space:]]*minlen.*/minlen = 8/'  /etc/security/pwquality.conf
 #Ensure PAM Enforces Password Requirements - Minimum Uppercase Characters
 sed -i -E 's/#?[[:space:]]*ucredit.*/ucredit = 1/'  /etc/security/pwquality.conf
-##!Set Lockout Time for Failed Password Attempts
-##!Set Deny For Failed Password Attempts
+##!Set Lockout Time for Failed Password Attempts && ##!Set Deny For Failed Password Attempts
+sed -i "$(grep -n '^auth.*pam_unix.so' /etc/pam.d/system-auth  | cut -f1 -d:) i auth required pam_faillock.so preauth silent deny=5 unlock_time=1800 fail_interval=900" /etc/pam.d/system-auth
+sed -i "$(grep -n '^auth.*pam_unix.so' /etc/pam.d/system-auth  | cut -f1 -d:) a auth [default=die] pam_faillock.so authfail deny=5 unlock_time=1800 fail_interval=900" /etc/pam.d/system-auth
+sed -i "$(grep -n '^account.*pam_unix.so' /etc/pam.d/system-auth  | cut -f1 -d:) i account required pam_faillock.so" /etc/pam.d/system-auth
+sed -i "$(grep -n '^auth.*pam_unix.so' /etc/pam.d/password-auth  | cut -f1 -d:) i auth required pam_faillock.so preauth silent deny=5 unlock_time=1800 fail_interval=900" /etc/pam.d/password-auth
+sed -i "$(grep -n '^auth.*pam_unix.so' /etc/pam.d/password-auth  | cut -f1 -d:) a auth [default=die] pam_faillock.so authfail deny=5 unlock_time=1800 fail_interval=900" /etc/pam.d/password-auth
+sed -i "$(grep -n '^account.*pam_unix.so' /etc/pam.d/password-auth  | cut -f1 -d:) i account required pam_faillock.so" /etc/pam.d/password-auth
 #Limit Password Reuse	
 grep -q 'password.*requisite.*pam_pwquality.*so.*remember=' /etc/pam.d/system-auth || sed -i -E 's/^(password.*requisite.*pam_pwquality.*so.)(.*)(remember=|.*)/\1\2 remember=5/' /etc/pam.d/system-auth
 grep -q 'password.*sufficient.*pam_unix.*so.*remember=' /etc/pam.d/system-auth || sed -i -E 's/^(password.*sufficient.*pam_unix.*so.)(.*)(remember=|.*)/\1\2 remember=5/' /etc/pam.d/system-auth
