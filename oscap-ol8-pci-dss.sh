@@ -12,7 +12,7 @@ echo 'rotate log files frequency daily' >> /etc/logrotate.conf
 #Configure auditd admin_space_left Action on Low Disk Space
 sed -i -E 's/#?[[:space:]]*admin_space_left_action.*/admin_space_left_action = SINGLE/' /etc/audit/auditd.conf
 #Configure auditd space_left Action on Low Disk Space
-sed -i -E 's/\bspace_left_action.*/space_left_action = SINGLE/' /etc/audit/auditd.conf
+sed -i -E 's/\bspace_left_action.*/space_left_action = EMAIL/' /etc/audit/auditd.conf
 #Configure auditd to use audispd's syslog plugin
 echo "#Configure auditd to use audispd's syslog plugin" >> /etc/audit/rules.d/audit.rules
 echo 'active = yes' >> /etc/audit/plugins.d/syslog.conf
@@ -234,7 +234,7 @@ sed -i "$(grep -n '^auth.*pam_unix.so' /etc/pam.d/system-auth  | cut -f1 -d:) a 
 sed -i "$(grep -n '^account.*pam_unix.so' /etc/pam.d/system-auth  | cut -f1 -d:) i account required pam_faillock.so" /etc/pam.d/system-auth
 sed -i "$(grep -n '^auth.*pam_unix.so' /etc/pam.d/password-auth  | cut -f1 -d:) i auth required pam_faillock.so preauth silent deny=5 unlock_time=1800 fail_interval=900" /etc/pam.d/password-auth
 sed -i "$(grep -n '^auth.*pam_unix.so' /etc/pam.d/password-auth  | cut -f1 -d:) a auth [default=die] pam_faillock.so authfail deny=5 unlock_time=1800 fail_interval=900" /etc/pam.d/password-auth
-sed -i "$(grep -n '^account.*pam_unix.so' /etc/pam.d/password-auth  | cut -f1 -d:) i account required pam_faillock.so" /etc/pam.d/password-auth
+sed -i "$(grep -n '^account.*pam_unix.so' /etc/pam.d/password-auth  | cut -f1 -d:) i account required pam_faillock.so" F/etc/pam.d/password-auth
 #Limit Password Reuse	
 grep -q 'password.*requisite.*pam_pwquality.*so.*remember=' /etc/pam.d/system-auth || sed -i -E 's/^(password.*requisite.*pam_pwquality.*so.)(.*)(remember=|.*)/\1\2 remember=5/' /etc/pam.d/system-auth
 grep -q 'password.*sufficient.*pam_unix.*so.*remember=' /etc/pam.d/system-auth || sed -i -E 's/^(password.*sufficient.*pam_unix.*so.)(.*)(remember=|.*)/\1\2 remember=5/' /etc/pam.d/system-auth
@@ -252,4 +252,10 @@ for PROG_PATH in $( find / -xdev -type f -perm -4000 -o -type f -perm -2000 2>/d
 do
   echo "-a always,exit -F path=$PROG_PATH -F auid>=1000 -F auid!=unset -F key=privileged" >> /etc/audit/rules.d/audit.rules
 done
-
+#Verify and  Correct File Permission with RPM
+#for FILE in $( rpm -Va | awk '{ if (substr($0,2,1)=="M") print $NF }' )
+#do
+#  PKG=$( rpm -qf $FILE )
+#  rpm --setperms $PKG
+#done
+#
