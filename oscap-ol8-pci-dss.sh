@@ -1,4 +1,12 @@
 #!/bin/bash
+append() {
+  arr=("$@")
+  file=${arr[-1]}
+  unset 'arr[${#arr[@]}-1]'
+  for i in "${arr[@]}"; do
+    echo "$i" >> $file
+  done
+}
 #Set Password Maximum Age
 sed -i -E 's/^#?PASS_MAX_DAYS.*/PASS_MAX_DAYS\t60/' /etc/login.defs
 #Prevent Login to Accounts With Empty Password
@@ -282,3 +290,14 @@ if ! [ "$(grep -c '^server' "$config_file")" -gt 1 ] ; then
     sed -i 's/#[ \t]*server/server/g' "$config_file"
   fi
 fi
+#Ensure auditd Collects Informartion on the Use of Privileged Commmands - sudoedit
+append \
+'#Ensure auditd Collects Informartion on the Use of Privileged Commmands - sudoedit' \
+'-a always,exit -F path=/usr/bin/sudoedit -F auid>=1000 -F auid!=unset -F key=privileged' \
+/etc/audit/rules.d/audit.rules
+#Ensure auditd Collects Informartion on the Use of Privileged Commmands - pstdrop
+append \
+'#Ensure auditd Collects Informartion on the Use of Privileged Commmands - sudoedit' \
+'-a always,exit -F path=/usr/sbin/postdrop -F auid>=1000 -F auid!=unset -F key=privileged' \
+/etc/audit/rules.d/audit.rules
+
