@@ -22,8 +22,10 @@ sed -i -E 's/#?[[:space:]]*admin_space_left_action.*/admin_space_left_action = S
 #Configure auditd space_left Action on Low Disk Space
 sed -i -E 's/\bspace_left_action.*/space_left_action = EMAIL/' /etc/audit/auditd.conf
 #Configure auditd to use audispd's syslog plugin
+append \
 "#Configure auditd to use audispd's syslog plugin" \
-'active = yes' >> /etc/audit/plugins.d/syslog.conf
+'active = yes' \
+/etc/audit/plugins.d/syslog.conf
 #Enabling 
 grep -q 'GRUB_CMDLINE_LINUX.*audit=1' /etc/default/grub || sed -i -E 's/^(GRUB_CMDLINE_LINUX)(.*)(audit=1|.*)\"/\1\2 audit=1"/' /etc/default/grub
 grub2-mkconfig -o /boot/grub2/grub.cfg
@@ -127,6 +129,7 @@ append \
 '-w /etc/localtime -p wa -k audit_time_rules' \
 /etc/audit/rules.d/audit.rules
 #Record Attempts to Alter Time Through clock_settime
+append \
 "#Record Attempts to Alter Time Through clock_settime" \
 '-a always,exit -F arch=b32 -S clock_settime -F a0=0x0 -F key=time-change' \
 '-a always,exit -F arch=b64 -S clock_settime -F a0=0x0 -F key=time-change' \
