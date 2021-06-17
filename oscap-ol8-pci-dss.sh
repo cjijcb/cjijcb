@@ -297,7 +297,29 @@ append \
 /etc/audit/rules.d/audit.rules
 #Ensure auditd Collects Informartion on the Use of Privileged Commmands - pstdrop
 append \
-'#Ensure auditd Collects Informartion on the Use of Privileged Commmands - sudoedit' \
-'-a always,exit -F path=/usr/sbin/postdrop -F auid>=1000 -F auid!=unset -F key=privileged' \
+  '#Ensure auditd Collects Informartion on the Use of Privileged Commmands - pstdrop' \
+  '-a always,exit -F path=/usr/sbin/postdrop -F auid>=1000 -F auid!=unset -F key=privileged' \
 /etc/audit/rules.d/audit.rules
+#Ensure auditd Collects Informartion on the Use of Privileged Commmands - usernetctl
+append \
+'#Ensure auditd Collects Informartion on the Use of Privileged Commmands - usernetctl' \
+'-a always,exit -F path=/usr/sbin/usernetctl -F auid>=1000 -F auid!=unset -F key=privileged' \
+/etc/audit/rules.d/audit.rules
+#Ensure auditd Collects Informartion on the Use of Privileged Commmands - postqueue
+append \
+'#Ensure auditd Collects Informartion on the Use of Privileged Commmands - postqueue' \
+'-a always,exit -F path=/usr/sbin/postqueue -F auid>=1000 -F auid!=unset -F key=privileged' \
+/etc/audit/rules.d/audit.rules
+#Disable At Service (atd)
+systemctl mask --now atd.service
+#Ensure No World-Writable File Exist
+find / -xdev -type f -perm -002 -exec chmod o-w {} \;
+#Build and Test AIDE
+if ! rpm -q --quiet "aide" ; then
+  yum install -y "aide"
+fi
+/usr/sbin/aide --init
+/bin/cp -p /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+
+
 
