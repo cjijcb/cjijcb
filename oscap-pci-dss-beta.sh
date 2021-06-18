@@ -340,7 +340,7 @@ yum -y install aide
 #install libreswan package
 yum -y install libreswan
 ##!	Ensure PAM Displays Last Logon/Access Notification
-'05 4 * * * root /usr/sbin/aide --check' >> /etc/crontab
+echo '05 4 * * * root /usr/sbin/aide --check' >> /etc/crontab
 #
 sudo service auditd restart
 #Ensure auditd Collects Information on the Use of Privileged Commands
