@@ -4,7 +4,7 @@ append() {
   file=${arr[-1]}
   unset 'arr[${#arr[@]}-1]'
   for i in "${arr[@]}"; do
-    echo "$i" >> $file
+    echo "$i" >> "$file"
   done
 }
 #Set Password Maximum Age
