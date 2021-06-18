@@ -344,7 +344,9 @@ yum -y install libreswan
 #
 sudo service auditd restart
 #Ensure auditd Collects Information on the Use of Privileged Commands
+append \
 "#Ensure auditd Collects Information on the Use of Privileged Commands" \
+/etc/audit/rules.d/audit.rules
 for PROG_PATH in $( find / -xdev -type f -perm -4000 -o -type f -perm -2000 2>/dev/null )
 do
   echo "-a always,exit -F path=$PROG_PATH -F auid>=1000 -F auid!=unset -F key=privileged" >> /etc/audit/rules.d/audit.rules
