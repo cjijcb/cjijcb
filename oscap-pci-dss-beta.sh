@@ -308,7 +308,7 @@ yum -y install audispd-plugins
 #Set Account Expiration Following Inactivity
 sed -i 's/^INACTIVE.*/INACTIVE=60/' /etc/default/useradd
 #Set Password Maximum
-sed -iE 's/#?PASS_MAX_DAYS.*/PASS_MAX_DAYS\t180/' /etc/login.defs
+sed -i E 's/#?PASS_MAX_DAYS.*/PASS_MAX_DAYS\t180/' /etc/login.defs
 ##!Force opensc To Use Defined Smart Card Driver
 ##!Configure opensc Smart Card Drivers
 #Install the pcsc-lite package
@@ -335,12 +335,12 @@ sed -i "$(grep -n '^account.*pam_unix.so' /etc/pam.d/password-auth  | cut -f1 -d
 #Limit Password Reuse	
 grep -q 'password.*requisite.*pam_pwquality.*so.*remember=' /etc/pam.d/system-auth || sed -i -E 's/^(password.*requisite.*pam_pwquality.*so.)(.*)(remember=|.*)/\1\2 remember=5/' /etc/pam.d/system-auth
 grep -q 'password.*sufficient.*pam_unix.*so.*remember=' /etc/pam.d/system-auth || sed -i -E 's/^(password.*sufficient.*pam_unix.*so.)(.*)(remember=|.*)/\1\2 remember=5/' /etc/pam.d/system-auth
-##!	Ensure PAM Displays Last Logon/Access Notification
-'05 4 * * * root /usr/sbin/aide --check' >> /etc/crontab
 #Install AIDE
 yum -y install aide
 #install libreswan package
 yum -y install libreswan
+##!	Ensure PAM Displays Last Logon/Access Notification
+'05 4 * * * root /usr/sbin/aide --check' >> /etc/crontab
 #
 sudo service auditd restart
 #Ensure auditd Collects Information on the Use of Privileged Commands
