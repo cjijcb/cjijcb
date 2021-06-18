@@ -254,6 +254,7 @@ append \
 append \
 "#Record Events that Modify User/Group Information - /etc/gshadow" \
 '-w /etc/gshadow -p wa -k audit_rules_usergroup_modification' \
+/etc/audit/rules.d/audit.rules
 #Ensure auditd Collects System Administrator Actions
 append \
 "#Ensure auditd Collects System Administrator Actions" \
