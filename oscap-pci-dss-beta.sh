@@ -308,10 +308,6 @@ append \
 yum -y install audispd-plugins
 #Set Account Expiration Following Inactivity
 sed -i 's/^INACTIVE.*/INACTIVE=60/' /etc/default/useradd
-#Set Password Maximum
-sed -i -E 's/#?PASS_MAX_DAYS.*/PASS_MAX_DAYS\t180/' /etc/login.defs
-##!Force opensc To Use Defined Smart Card Driver
-##!Configure opensc Smart Card Drivers
 #Install the pcsc-lite package
 yum -y install pcsc-lite
 #Enable the pcscd Service
