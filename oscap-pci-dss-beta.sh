@@ -316,6 +316,7 @@ sed -i -E 's/#?PASS_MAX_DAYS.*/PASS_MAX_DAYS\t180/' /etc/login.defs
 yum -y install pcsc-lite
 #Enable the pcscd Service
 systemctl enable pcscd.service
+systemctl start pcscd.service
 #sudo yum install opensc
 yum -y install opensc
 #Ensure PAM Enforces Password Requirements - Minimum Digit Characters
