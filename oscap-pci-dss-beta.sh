@@ -7,7 +7,7 @@ append() {
     echo "$i" >> "$file"
   done
 }
-#Set Password Maximum Age
+#Set Password Maximum Age @5166
 sed -i -E 's/^#?PASS_MAX_DAYS.*/PASS_MAX_DAYS\t60/' /etc/login.defs
 #Prevent Login to Accounts With Empty Password
 sed -i 's/[[:space:]]nullok[[:space:]]/ /g' /etc/pam.d/system-auth
