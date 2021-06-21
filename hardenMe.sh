@@ -188,20 +188,26 @@ sed -i 's/.*space_left_action.*/space_left_action = email/' /etc/audit/auditd.co
 sed -i 's/.*action_mail_acct.*/action_mail_acct = root/' /etc/audit/auditd.conf
 echo 'admin_space_left_action = halt' >> /etc/audit/auditd.conf
 #5112
+echo '#cis_5112' >> /etc/audit/rules.d/audit.rules
 echo '-w /etc/sudoers -p wa -k scope -w /etc/sudoers.d/ -p wa -k scope'  >> /etc/audit/rules.d/audit.rules
 #5113
+echo '#cis_5113' >> /etc/audit/rules.d/audit.rules
 echo '-w /var/log/lastlog -p wa -k logins -w /var/run/faillock/ -p wa -k logins'  >> /etc/audit/rules.d/audit.rules
 #5114
-echo '-w /var/run/utmp -p wa -k session -w /var/log/wtmp -p wa -k logins -w /var/log/btmp -p wa -k logins'  >> /etc/audit/rules.d/audit.rules
+echo '#cis_5114' >> /etc/audit/rules.d/audit.rules
+echo '-w /var/run/utmp -p wa -k session -w /var/log/wtmp -p wa -k logins -w /var/log/btmp -p wa -k logins' >> /etc/audit/rules.d/audit.rules
 #5115
+echo '#cis_5115' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b32 -S adjtimex -S settimeofday -S stime -k time-change' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b32 -S clock_settime -k time-change' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b64 -S adjtimex -S settimeofday -S stime -k time-change' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b64 -S clock_settime -k time-change' >> /etc/audit/rules.d/audit.rules
 echo '-w /etc/localtime -p wa -k time-change' >> /etc/audit/rules.d/audit.rules
 #5116
+echo '#cis_5116' >> /etc/audit/rules.d/audit.rules
 echo '-w /etc/selinux/ -p wa -k MAC-policy -w /usr/share/selinux/ -p wa -k MAC-policy'  >> /etc/audit/rules.d/audit.rules
 #5117
+echo '#cis_5117' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b64 -S sethostname -S setdomainname -k system-locale -a always,exit -F arch=b32 -S sethostname -S setdomainname -k system-locale -w /etc/issue -p wa -k system-locale -w /etc/issue.net -p wa -k system-locale -w /etc/hosts -p wa -k system-locale -w /etc/sysconfig/network -p wa -k system-locale -w /etc/sysconfig/network-scripts/ -p wa -k system-locale'  >> /etc/audit/rules.d/audit.rules
 #5118
 echo '#cis_5118' >> /etc/audit/rules.d/audit.rules
@@ -229,6 +235,7 @@ echo '#cis_5121' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts' >> /etc/audit/rules.d/audit.rules
 #5122
+echo '#cis_5122' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b32 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete' >> /etc/audit/rules.d/audit.rules
 #5123
