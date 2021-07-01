@@ -68,7 +68,7 @@ sed -i -E "1,/.*radius_db[[:space:]]*=[[:space:]]*.*/{s/.*radius_db[[:space:]]*=
         radius_db = \"${radNameDB}\"/;}" /etc/raddb/mods-available/sql
 #
 sed -i -E "1,/.*server[[:space:]]*=[[:space:]]*.*/{s/.*server[[:space:]]*=[[:space:]]*.*/\
-        server = \"locahost\"/;}" /etc/raddb/mods-available/sql
+        server = \"localhost\"/;}" /etc/raddb/mods-available/sql
 #
 sed -i -E "1,/.*port[[:space:]]*=[[:space:]]*.*/{s/.*port[[:space:]]*=[[:space:]]*.*/\
         port = 3306/;}" /etc/raddb/mods-available/sql
