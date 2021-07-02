@@ -7,10 +7,18 @@ NC='\033[0m'
 #
 echo -e "Enter what ${GRN}will${NC} be the ${GRN}root ${RD}password${NC} for ${GRN}mariaDB${NC}."
 read rootPass
+if [[ -z "$rootPass" ]];
+  then echo "${RD}Error: you entered nothing.${NC}"; exit 1; fi
+#
 echo -e "Enter what ${GRN}will${NC} be the ${GRN}radius database ${YLW}name${NC}."
 read radNameDB
+if [[ -z "$radNameDB" ]];
+  then echo "${RD}Error: you entered nothing.${NC}"; exit 1; fi
+#
 echo -e "Enter what ${GRN}will${NC} be the ${GRN}radius database ${RD}password${NC}."
 read radPass
+if [[ -z "$radPass" ]];
+  then echo "${RD}Error: you entered nothing.${NC}"; exit 1; fi
 #
 sudo yum -y install httpd && \
 sudo systemctl start httpd && \
