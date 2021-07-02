@@ -82,7 +82,7 @@ sed -i "$(grep -n 'password = '  /etc/raddb/mods-available/sql | tail -1 | cut -
 sed -i -E "s/.*read_clients[[:space:]]*=.*/\
         read_clients = yes/" /etc/raddb/mods-available/sql
 #
-sed -i -E "/[^#]tls[[:space:]]\{/,/[[:space:]]\}/ s/(.*)/#\1/" /etc/raddb/mods-available/sql
+sed -i -E "/mysql[[:space:]]\{/,/[[:space:]]\}/{/mysql/,/.*#/ s/./&#/2 }" /etc/raddb/mods-available/sql
 #
 sudo chgrp -h radiusd /etc/raddb/mods-enabled/sql
 sudo systemctl restart radiusd
