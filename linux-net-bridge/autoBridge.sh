@@ -10,7 +10,7 @@ nmcli con mod bridge0 ipv4.gateway ${GTWY} && \
 nmcli con mod bridge0 ipv4.method manual && \
 nmcli con mod bridge0 ipv4.dns ${DNS} && \
 nmcli con mod bridge0 bridge.stp no && \
-nmcli con add type ethernet slave-type bridge ifname ${ETH} master bridge0
+nmcli con add type ethernet slave-type bridge ifname ${ETH} master bridge0 && \
 nmcli con mod bridge0 connection.autoconnect-slaves yes && \
 nmcli con down ${ETH} && \
 nmcli con up bridge0
