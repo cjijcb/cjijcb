@@ -1,10 +1,15 @@
 #!/bin/bash
-#freedius
-echo 'enter your root password for mariadb'
+#coloring
+RD='\033[0;31m'
+GRN='\033[0;32m'
+YLW='\033[1;33m'
+NC='\033[0m'
+#
+echo -e "Enter what ${GRN}will${NC} be the ${GRN}root ${RD}password${NC} for ${GRN}mariaDB${NC}."
 read rootPass
-echo 'enter the radius database name'
+echo -e "Enter what ${GRN}will${NC} be the ${GRN}radius database ${YLW}name${NC}."
 read radNameDB
-echo 'enter the radius database password'
+echo -e "Enter what ${GRN}will${NC} be the ${GRN}radius database ${RD}password${NC}."
 read radPass
 #
 sudo yum -y install httpd
