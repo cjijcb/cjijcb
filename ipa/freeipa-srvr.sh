@@ -21,7 +21,7 @@ if ! grep -q -E "${IPV4}[[:space:]]+$(hostname)" /etc/hosts && [[ -n "${IPV4}" ]
 fi
 #
 yum -y module enable idm:DL1
-yum -y install ipa*
+yum -y install ipa\*
 #
 ipa-server-install --mkhomedir <<EOF
 yes
