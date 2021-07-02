@@ -112,3 +112,5 @@ sudo systemctl restart radiusd.service httpd
 sudo dnf -y install policycoreutils-python-utils
 sudo semanage fcontext -a -t httpd_sys_rw_content_t "/var/www/html/daloradius(/.*)?"
 sudo restorecon -Rv /var/www/html/daloradius
+sudo systemctl stop radiusd.service
+sudo systemctl start radiusd.service
