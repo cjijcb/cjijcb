@@ -43,3 +43,7 @@ $DEFAULT
 no
 yes
 EOF
+#
+kinit admin <<EOF
+${IPA_PASS}
+EOF
