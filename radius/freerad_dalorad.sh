@@ -5,20 +5,23 @@ GRN='\033[0;32m'
 YLW='\033[1;33m'
 NC='\033[0m'
 #
-echo -e "Enter what ${GRN}will${NC} be the ${GRN}root ${RD}password${NC} for ${GRN}mariaDB${NC}."
+echo -e "Enter a new ${GRN}root ${RD}password${NC} for ${GRN}mariaDB${NC}:"
 read rootPass
 if [[ -z "$rootPass" ]];
-  then echo -e "${RD}Error: you entered nothing.${NC}"; exit 1; fi
+  then echo -e "${RD}Error${NC}: you entered nothing."; exit 1;
+fi
 #
-echo -e "Enter what ${GRN}will${NC} be the ${GRN}radius database ${YLW}name${NC}."
+echo -e "Enter a new ${GRN}radius database ${YLW}name${NC}:"
 read radNameDB
 if [[ -z "$radNameDB" ]];
-  then echo -e "${RD}Error: you entered nothing.${NC}"; exit 1; fi
+  then echo -e "${RD}Error${NC}: you entered nothing."; exit 1;
+fi
 #
-echo -e "Enter what ${GRN}will${NC} be the ${GRN}radius database ${RD}password${NC}."
+echo -e "Enter a new ${GRN}radius database ${RD}password${NC}:"
 read radPass
 if [[ -z "$radPass" ]];
-  then echo -e "${RD}Error: you entered nothing.${NC}"; exit 1; fi
+  then echo -e "${RD}Error${NC}: you entered nothing."; exit 1;
+fi
 #
 sudo yum -y install httpd && \
 sudo systemctl start httpd && \
@@ -27,7 +30,7 @@ sudo dnf -y install mariadb-server && \
 sudo systemctl start mariadb && \
 #
 mysql_secure_installation <<EOF
-
+$NULL
 y
 ${rootPass}
 ${rootPass}
@@ -126,3 +129,4 @@ sudo dnf -y install policycoreutils-python-utils && \
 sudo semanage fcontext -a -t httpd_sys_rw_content_t "/var/www/html/daloradius(/.*)?" && \
 sudo restorecon -Rv /var/www/html/daloradius && \
 sudo systemctl restart radiusd
+sed -i -E "s/(.*BY) User (ASC.*)/\1 Username \2/" /var/www/html/daloradius/include/management/fileExport.php
