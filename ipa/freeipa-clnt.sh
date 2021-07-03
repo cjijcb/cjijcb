@@ -6,13 +6,13 @@ NC='\033[0m'
 echo "Enter the IPA ${GRN}Server Name${NC}:"
 read IPA_SRVR
 if [[ -z "$IPA_SRVR" ]];
-  then echo -e "${RD}Error:${NC} you entered nothing."; exit 1;
+  then echo -e "${RD}Error${NC}: you entered nothing."; exit 1;
 fi
 #
 echo "Enter the IPA ${GRN}Server IP${NC}:"
 read IPA_IP
 if [[ -z "$IPA_IP" ]];
-  then echo -e "${RD}Error:${NC} you entered nothing."; exit 1;
+  then echo -e "${RD}Error${NC}: you entered nothing."; exit 1;
 fi
 #
 sed -i -E "/${IPA_IP}[[:space:]]+${IPA_SRVR}/d" /etc/hosts
