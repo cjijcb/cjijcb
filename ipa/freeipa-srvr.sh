@@ -47,3 +47,11 @@ EOF
 kinit admin <<EOF
 ${IPA_PASS}
 EOF
+#
+ipa sudorule-add superusers --hostcat=all --cmdcat=all --runasusercat=all --runasgroupcat=all
+mv /usr/share/ipa/ui/images/header-logo.png /usr/share/ipa/ui/images/header-logo.png.bak
+mv /usr/share/ipa/ui/images/product-name.png /usr/share/ipa/ui/images/product-name.png.bak
+mv /usr/share/ipa/ui/images/login-screen-logo.png /usr/share/ipa/ui/images/login-screen-logo.png.bak
+curl -s -o /usr/share/ipa/ui/images/header-logo.png https://raw.githubusercontent.com/cjijcb/cjijcb/main/sources/header-logo.png
+curl -s -o /usr/share/ipa/ui/images/product-name.png https://raw.githubusercontent.com/cjijcb/cjijcb/main/sources/product-name.png
+curl -s -o /usr/share/ipa/ui/images/login-screen-logo.png https://raw.githubusercontent.com/cjijcb/cjijcb/main/sources/login-screen-logo.png
