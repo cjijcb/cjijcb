@@ -48,6 +48,8 @@ kinit admin <<EOF
 ${IPA_PASS}
 EOF
 #
+ipa config-mod --defaultshell=/bin/bash
+#
 ipa sudorule-add superusers --hostcat=all --cmdcat=all --runasusercat=all --runasgroupcat=all
 mv /usr/share/ipa/ui/images/header-logo.png /usr/share/ipa/ui/images/header-logo.png.bak
 mv /usr/share/ipa/ui/images/product-name.png /usr/share/ipa/ui/images/product-name.png.bak
