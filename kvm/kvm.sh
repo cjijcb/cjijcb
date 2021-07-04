@@ -1,5 +1,5 @@
 #!/bin/bash
-yum -y enable virt
+yum -y module enable virt
 yum -y install qemu-kvm libvirt-client\* libvirt-daemon\* xorg-x11-xauth virt-install virt-manager virt-clone
 systemctl enable --now libvirtd
 systemctl restart libvirtd
