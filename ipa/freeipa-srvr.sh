@@ -23,23 +23,22 @@ fi
 yum -y module enable idm:DL1
 yum -y install ipa\*
 #
-ipa-server-install --mkhomedir <<EOF
+ipa-server-install \
+--admin-password=${IPA_PASS} \
+--ds-password=${DM_PASS} \
+--setup-dns \
+--setup-adtrust \
+--setup-kra \
+--auto-reverse \
+--forwarder=208.67.222.222 \
+--forwarder=208.67.220.220 \
+--mkhomedir \
+--enable-compat <<EOF
+${DEFAULT}
+${DEFAULT}
+${DEFAULT}
 yes
-$DEFAULT
-$DEFAULT
-$DEFAULT
-${DM_PASS}
-${DM_PASS}
-${IPA_PASS}
-${IPA_PASS}
-yes
-no
-208.67.222.222
-208.67.220.220
-$DEFAULT
-yes
-yes
-$DEFAULT
+${DEFAULT}
 no
 yes
 EOF
