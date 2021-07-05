@@ -15,6 +15,12 @@ if [[ -z "$IPA_IP" ]];
   then echo -e "${RD}Error${NC}: you entered nothing."; exit 1;
 fi
 #
+echo -e "Enter the IPA ${GRN}Admin password${NC}:"
+read IPA_ADMIN_PASS
+if [[ -z "$IPA_IP" ]];
+  then echo -e "${RD}Error${NC}: you entered nothing."; exit 1;
+fi
+#
 sed -i -E "/${IPA_IP}[[:space:]]+${IPA_SRVR}/d" /etc/hosts
 echo "${IPA_IP} ${IPA_SRVR}" >> /etc/hosts && \
 #
@@ -27,10 +33,8 @@ IPA_DMN=$( sed -E -n "s/[^\.]+\.(.*)/\1/p" <<< $IPA_SRVR )
 #
 yum -y module enable idm:DL1 && \
 yum -y install ipa-client\* && \
-ipa-client-install --force-join --mkhomedir --server=${IPA_SRVR} --domain=${IPA_DMN} <<EOF
+ipa-client-install --force-join --mkhomedir --server=${IPA_SRVR} --domain=${IPA_DMN} --principal=admin --password=${IPA_ADMIN_PASS} --no-ntp <<EOF
 yes
-no
 yes
-admin
 EOF
 #
