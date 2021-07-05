@@ -3,13 +3,13 @@ RD='\033[0;31m'
 GRN='\033[0;32m'
 NC='\033[0m'
 #
-echo "Enter the IPA ${GRN}Server Name${NC}:"
+echo -e "Enter the IPA ${GRN}Server Name${NC}:"
 read IPA_SRVR
 if [[ -z "$IPA_SRVR" ]];
   then echo -e "${RD}Error${NC}: you entered nothing."; exit 1;
 fi
 #
-echo "Enter the IPA ${GRN}Server IP${NC}:"
+echo -e "Enter the IPA ${GRN}Server IP${NC}:"
 read IPA_IP
 if [[ -z "$IPA_IP" ]];
   then echo -e "${RD}Error${NC}: you entered nothing."; exit 1;
