@@ -5,19 +5,19 @@ GRN='\033[0;32m'
 YLW='\033[1;33m'
 NC='\033[0m'
 #
-echo -e "Enter a new ${GRN}root ${RD}password${NC} for ${GRN}mariaDB${NC}:"
+echo -n -e "Enter a new ${GRN}root ${RD}password${NC} for ${GRN}mariaDB${NC}:"
 read rootPass
 if [[ -z "$rootPass" ]];
   then echo -e "${RD}Error${NC}: you entered nothing."; exit 1;
 fi
 #
-echo -e "Enter a new ${GRN}radius database ${YLW}name${NC}:"
+echo -n -e "Enter a new ${GRN}radius database ${YLW}name${NC}:"
 read radNameDB
 if [[ -z "$radNameDB" ]];
   then echo -e "${RD}Error${NC}: you entered nothing."; exit 1;
 fi
 #
-echo -e "Enter a new ${GRN}radius database ${RD}password${NC}:"
+echo -n -e "Enter a new ${GRN}radius database ${RD}password${NC}:"
 read radPass
 if [[ -z "$radPass" ]];
   then echo -e "${RD}Error${NC}: you entered nothing."; exit 1;
