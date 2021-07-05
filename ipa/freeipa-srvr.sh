@@ -4,13 +4,13 @@ GRN='\033[0;32m'
 NC='\033[0m'
 IPV4=$( nmcli | sed -E -n "/: connected to/,/inet4/{/inet4/ s/.*inet4[[:space:]](.*)\/.*/\1/p}" ) >/dev/null 2>&1
 #
-echo -e "Enter a new password for ${GRN}Directory Manager${NC}:"
+echo -n -e "Enter a new password for ${GRN}Directory Manager${NC}:"
 read DM_PASS
 if [[ -z "$DM_PASS" ]] || [[ $(wc -m <<< "$DM_PASS") -lt 9 ]];
   then echo -e "${RD}Error${NC}: password cannot be empty and should be alteast 8 characters long."; exit 1;
 fi
 #
-echo -e "Enter a new for password ${GRN}IPA admin${NC}:"
+echo -n -e "Enter a new for password ${GRN}IPA admin${NC}:"
 read IPA_PASS
 if [[ -z "$IPA_PASS" ]] || [[ $(wc -m <<< "$IPA_PASS") -lt 9 ]];
   then echo -e "${RD}Error${NC}: password cannot be empty and should be alteast 8 characters long."; exit 1;
