@@ -1,0 +1,14 @@
+/var/log/pfsense.log
+/var/log/cisco-ios.log
+/var/log/cisco-asa.log
+/var/log/cisco-vlan.log
+/var/log/messages
+{
+    missingok
+    daily
+    copytruncate
+    rotate 100
+    dateext
+    dateformat -%m-%d-%Yi
+}
+

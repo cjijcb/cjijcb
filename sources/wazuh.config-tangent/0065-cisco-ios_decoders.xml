@@ -1,0 +1,132 @@
+<!--
+  -  Cisco IOS decoders
+  -  Author: Daniel Cid.
+  -  Updated by Wazuh, Inc.
+  -  Copyright (C) 2015-2020, Wazuh Inc.
+  -  Copyright (C) 2009 Trend Micro Inc.
+  -  This program is a free software; you can redistribute it and/or modify it under the terms of GPLv2.
+-->
+
+
+<!--
+  - Group for Cisco IOS messages.
+  - 
+ -->
+
+
+<decoder name="cisco-ios">
+  <prematch>^%\w+-\d-\w+: </prematch>
+</decoder>
+
+<!--
+  - With "empty" program name
+-->
+<decoder name="cisco-ios">
+  <program_name />
+  <prematch>^%\w+-\d-\w+: </prematch>
+</decoder>
+
+<!--
+  - Hour first, no date or sequence number
+  - May  7 14:44:06 172.20.21.60 79: May  7 06:28:42.477 AEST: %SEC-6-IPACCESSLOGP: list 102 denied tcp 10.0.6.56(3067) -> 172.36.4.7(139), 1 packet
+  - May  7 14:44:06 172.20.21.60 79: May  7 06:28:42.477: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/22, changed state to down
+  * May  7 14:44:06 172.20.21.60 Mar  1 18:46:11: 8.0.0.0 %IPS-4-SIGNATURE: Configured from console by vty2 (10.34.195.36)
+  * May  7 14:44:06 172.20.21.60 Sep  1 10:25:29 10.10.10.1 %IPS-4-SIGNATURE: Sig:3051 Subsig:1 Sev:4 TCP Connection Window Size DoS [192.168.100.11:51654 -> 10.10.10.10:4444]
+  - May 07 14:44:06 172.20.21.60 Mar 01 18:46:11: %SYS-5-CONFIG_I: Configured from console by vty2 (10.34.195.36)
+  - 00:00:46: %LINK-3-UPDOWN: Interface Port-channel1, changed state to up
+-->
+
+<decoder name="cisco-ios">
+  <prematch>^\.* \.*\d \d+:\d+:\d+ \S* \d+: \S* \d*\p*\s*\.*\d \d+:\d+:\S*\p*\.*%</prematch>
+</decoder>
+
+<!--
+  - Date and hour (preceded by * or nothing), no sequence number
+  - *Mar  1 18:46:11: %SYS-5-CONFIG_I: Configured from console by vty2 (10.34.195.36)
+  - Mar  1 18:46:11: %SYS-5-CONFIG_I: Configured from console by vty2 (10.34.195.36)
+-->
+<decoder name="cisco-ios">
+  <prematch>^\.* \.*\d \d+:\d+:\d+ \S* \d*\p*\s*\p*\w+\s+\d*\s+\d+:\d+:\d+\p*\.*%</prematch>
+</decoder>
+
+<!--
+  - Date and hour (preceded by * or nothing) with ms and timezone, no sequence number
+  -  May  7 14:44:06 172.20.21.60 Mar  1 18:48:50.483 UTC: %SYS-5-CONFIG_I: Configured from console by vty2 (10.34.195.36)
+  - *Mar  1 18:48:50.483 UTC: %SYS-5-CONFIG_I: Configured from console by vty2 (10.34.195.36)
+-->
+<decoder name="cisco-ios">
+  <prematch>^\.* \.*\d \d+:\d+:\d+ \S* \d*\p*\s*\p*\w+\s+\d*\s+\d+:\d+:\d+.\d+\s+\w+\p*\.*%</prematch>
+</decoder>
+
+
+<!--
+  - Sequence number, no date or time
+  - 
+  - 000019: %SYS-5-CONFIG_I: Configured from console by vty2 (10.34.195.36)
+-->
+
+<decoder name="cisco-ios">
+  <prematch>^\.* \.*\d \d+:\d+:\d+ \S* \d*\p*\s*\d+\p* \.*%</prematch>
+</decoder>
+
+<!--
+  - Sequence number, date (preceded by * or . or nothing) and hour
+  - May  7 14:44:06 172.20.21.60 681: Aug 17 17:41:24.776 AEST: %SEC-6-IPACCESSLOGS:
+  - 1348: .Jun 12 18:22:22 UTC: %SYS-5-CONFIG_I:
+  - 1348: *Jun 12 18:22:22 UTC: %SYS-5-CONFIG_I:
+  - 1348: Jun 12 18:22:22 UTC: %SYS-5-CONFIG_I:
+  - 681: Aug 17 17:41:24.776 AEST: %SEC-6-IPACCESSLOGS:
+-->
+
+<decoder name="cisco-ios">
+  <prematch>^\.* \.*\d \d+:\d+:\d+ \S* \d*\p*\s*\d+:\s+\p*\w+\s+\d+\s+\S+\s+\w+\p*\.*%</prematch>
+</decoder>
+
+
+<!-- Cisco IOS
+  - Will extract the action, srcip, srcport, dstip and dstport
+  - Samples:
+  - May  7 14:44:06 172.20.21.60 79: May  7 06:28:42.477 AEST: %SEC-6-IPACCESSLOGP: list 102 denied tcp 10.0.6.56(3067) -> 172.36.4.7(139), 1 packet
+  - 681: Aug 17 17:41:24.776 AEST: %SEC-6-IPACCESSLOGP: list 102 denied tcp 10.0.6.56(3067) -> 172.36.4.7(139), 1 packet
+  - 39222: *Oct 6 03:32:02.070 mng: %SEC-6-IPACCESSLOGP: list 199 denied tcp 10.0.61.108(1477) -> 10.0.127.20(445), 1 packet
+  - 39222: *Oct 6 03:32:02.070 mng: %SEC-6-IPACCESSLOGP: list 167 denied udp xx.xx.xx.xx(137) (GigabitEthernet0/1.6 ab9c.2a62.aa8d) -> xxx.xxx.xxx.xxx(137), 1 packet
+  -->
+
+<decoder name="cisco-ios-acl">
+  <parent>cisco-ios</parent>
+  <!-- <type>firewall</type> -->
+  <prematch>%SEC-6-IPACCESSLOGP: </prematch>
+  <regex offset="after_prematch">list \S+ (\w+) (\w+) </regex>
+  <regex>(\S+)\((\d+)\) \.*-> (\S+)\((\d+)\)</regex>
+  <order>action, protocol, srcip, srcport, dstip, dstport</order>
+</decoder>
+
+
+<!-- Cisco IOS IDS/IPS module
+  - Will extract the id, srcip, srcport, dstip and dstport
+  - May  7 14:44:06 172.20.21.60 Sep  1 10:25:29 10.10.10.1 %IPS-4-SIGNATURE: Sig:3051 Subsig:1 Sev:4 TCP Connection Window Size DoS [192.168.100.11:51654 -> 10.10.10.10:4444]
+  - May  7 14:44:06 172.20.21.60 Mar  1 18:46:11: %IPS-4-SIGNATURE: Configured from console by vty2 (10.34.195.36)- 
+  - Sep  1 10:25:29 10.10.10.1 %IPS-4-SIGNATURE: Sig:3051 Subsig:1 Sev:4 TCP Connection Window Size DoS [192.168.100.11:51654 -> 10.10.10.10:4444]
+  - Sep  1 10:25:29 10.10.10.1 %IPS-4-SIGNATURE: Sig:3051 Subsig:1 Sev:4 TCP Connection Window Size DoS [192.168.100.11:60797 -> 10.10.10.10:80]
+  - Sep  1 10:25:29 10.10.10.1 %IPS-4-SIGNATURE: Sig:5123 Subsig:2 Sev:5 WWW IIS Internet Printing Overflow [192.168.100.11:60797 -> 10.10.10.10:80]
+  -->
+<decoder name="cisco-ios-ids">
+  <parent>cisco-ios</parent>
+  <type>ids</type>
+  <prematch>%IPS-4-SIGNATURE: </prematch>
+  <regex offset="after_prematch">Sig:(\d+) \.+[(\S+):(\d+) -> </regex>
+  <regex>(\S+):(\d+)]</regex>
+  <order>id, srcip, srcport, dstip, dstport</order>
+  <fts>name, id, srcip, dstip</fts>
+  <ftscomment>First time Cisco IOS IDS/IPS module rule fired.</ftscomment>
+</decoder>
+
+
+<!-- Cisco IOS
+  - Extracts the ID of cisco ios messages IF NOT IDS/ACL log.
+  -->
+<decoder name="cisco-ios-default">
+  <parent>cisco-ios</parent>
+  <regex>(%\w+-\d-\w+):</regex>
+  <order>id</order>
+</decoder>

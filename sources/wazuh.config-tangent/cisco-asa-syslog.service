@@ -1,0 +1,14 @@
+[Unit]
+Description=Cisco ASA syslog to ossec 
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=60
+User=root
+ExecStart=/usr/bin/bash /etc/systemd/system/cisco-asa-syslog.sh
+
+[Install]
+WantedBy=multi-user.target

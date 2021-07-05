@@ -1,0 +1,87 @@
+<!-- Local Decoders -->
+
+<!-- Modify it at your will. -->
+<!-- Copyright (C) 2015-2020, Wazuh Inc. -->
+
+<!--
+  - Allowed static fields:
+  - location   - where the log came from (only on FTS)
+  - srcuser    - extracts the source username
+  - dstuser    - extracts the destination (target) username
+  - user       - an alias to dstuser (only one of the two can be used)
+  - srcip      - source ip
+  - dstip      - dst ip
+  - srcport    - source port
+  - dstport    - destination port
+  - protocol   - protocol
+  - id         - event id
+  - url        - url of the event
+  - action     - event action (deny, drop, accept, etc)
+  - status     - event status (success, failure, etc)
+  - extra_data - Any extra data
+-->
+<!--
+<decoder name="local_decoder_example">
+    <program_name>local_decoder_example</program_name>
+</decoder>
+-->
+
+<!-- May 11 13:20:14 192.168.120.21 dpinger[38572]: TRANS_VLAN66GW 192.168.66.1: sendto error: 64-->
+<decoder name="dpinger">
+    <program_name>dpinger</program_name>
+</decoder>
+
+<decoder name="dpinger-field">
+  <parent>dpinger</parent>
+  <regex>^(\S*) (\S*): (\S*) (\S*):</regex>
+  <order>id,srcip,action,dstip</order>
+</decoder>
+
+<!--
+  - May 12 07:43:33 192.168.120.21 charon[57514]: 06[IKE] <con2000|2>   activating IKE_DPD task
+  - May 11 16:24:24 192.168.120.21 charon[2378]: 08[ENC] <con2000|1> generating INFORMATIONAL request 555 [ ]
+  - May 12 07:43:43 192.168.120.21 charon[57514]: 12[NET] <con2000|2> sending packet: from 10.0.4.50[500] to 10.0.3.50[500] (96 bytes)
+  - May 12 07:43:43 192.168.120.21 charon[57514]: 12[NET] <con2000|2> received packet: from 10.0.3.50[500] to 10.0.4.50[500] (96 bytes)
+-->
+
+<!--
+<decoder name="charon">
+    <program_name>charon</program_name>
+</decoder>
+
+<decoder name="charon-field">
+  <parent>charon</parent>
+  <regex>^(\d+[\S*]\s*\.+)\s+(\.+\s*\.+)\p* from (\S*)[\d+] to (\S*)[\d+]</regex>
+  <order>id,action,srcip,dstip</order>
+</decoder>
+-->
+
+<decoder name="charon">
+  <program_name>charon</program_name>
+</decoder>
+ 
+<decoder name="charon">
+  <parent>charon</parent>
+  <regex>^(\d+[\S*]\s*\.+)\s+</regex>
+  <order>id</order>
+</decoder>
+ 
+<decoder name="charon">
+  <parent>charon</parent>
+  <regex>\s+(\w+\s*\w+)\p*\s+\w+</regex>
+  <order>action</order>
+</decoder>
+
+
+<decoder name="charon">
+  <parent>charon</parent>
+  <regex>from (\.+)[\d+]</regex>
+  <order>srcip</order>
+</decoder>
+
+<decoder name="charon">
+  <parent>charon</parent>
+  <regex>to (\.+)[\d+]</regex>
+  <order>dstip</order>
+</decoder>
+
