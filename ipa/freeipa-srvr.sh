@@ -20,6 +20,8 @@ if ! grep -q -E "${IPV4}[[:space:]]+$(hostname)" /etc/hosts && [[ -n "${IPV4}" ]
   then echo "${IPV4} $(hostname)" >> /etc/hosts
 fi
 #
+rm -f /etc/samba/smb.conf > /dev/null 2>&1
+#
 yum -y module enable idm:DL1 && \
 yum -y module install idm:DL1/* && \
 yum -y install ipa\* && \
