@@ -32,9 +32,16 @@ chattr +i /etc/resolv.conf
 IPA_DMN=$( sed -E -n "s/[^\.]+\.(.*)/\1/p" <<< $IPA_SRVR )
 #
 yum -y module enable idm:DL1 && \
+yum -y module install idm:DL1/* && \
 yum -y install ipa-client\* && \
-ipa-client-install --force-join --mkhomedir --server=${IPA_SRVR} --domain=${IPA_DMN} --principal=admin --password=${IPA_ADMIN_PASS} --no-ntp <<EOF
+ipa-client-install \
+--force-join \
+--mkhomedir \
+--server=${IPA_SRVR} \
+--domain=${IPA_DMN} \
+--principal=admin \
+--password=${IPA_ADMIN_PASS} <<EOF || exit
 yes
+no
 yes
 EOF
-#
