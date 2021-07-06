@@ -41,7 +41,7 @@ ipa-client-install \
 --domain=${IPA_DMN} \
 --principal=admin \
 --password=${IPA_ADMIN_PASS} \
---no-ntp <<EOF
+--no-ntp <<EOF || exit
 yes
 yes
 EOF
