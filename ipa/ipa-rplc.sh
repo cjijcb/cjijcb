@@ -36,7 +36,7 @@ yum -y module install idm:DL1/* \
 yum -y install ipa-client\* && \
 ipa-client-install \
 --force-join \
--mkhomedir \
+--mkhomedir \
 --server=${IPA_SRVR} \
 --domain=${IPA_DMN} \
 --principal=admin \
