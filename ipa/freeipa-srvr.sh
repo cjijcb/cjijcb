@@ -25,7 +25,12 @@ yum -y module install idm:DL1/* && \
 yum -y install ipa\* && \
 rm -f /etc/samba/smb.conf > /dev/null 2>&1
 #
+IPA_DMN=$( sed -E -n "s/[^\.]+\.(.*)/\1/p" <<< $(hostname) ) && \
+IPA_RLM=$( tr '[:lower:]' '[:upper:]' <<< ${IPA_DMN} ) && \
 ipa-server-install \
+--domain=${IPA_DMN} \
+--realm=${IPA_RLM} \
+--hostname=$(hostname) \
 --admin-password=${IPA_PASS} \
 --ds-password=${DM_PASS} \
 --setup-dns \
@@ -36,10 +41,6 @@ ipa-server-install \
 --forwarder=208.67.220.220 \
 --mkhomedir \
 --enable-compat <<EOF || exit
-${DEFAULT}
-${DEFAULT}
-${DEFAULT}
-yes
 ${DEFAULT}
 no
 yes
