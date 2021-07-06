@@ -40,9 +40,9 @@ ipa-client-install \
 --server=${IPA_SRVR} \
 --domain=${IPA_DMN} \
 --principal=admin \
---password=${IPA_ADMIN_PASS} \
---no-ntp <<EOF || exit
+--password=${IPA_ADMIN_PASS} <<EOF || exit
 yes
+no
 yes
 EOF
 #
