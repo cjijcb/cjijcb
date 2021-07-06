@@ -20,8 +20,9 @@ if ! grep -q -E "${IPV4}[[:space:]]+$(hostname)" /etc/hosts && [[ -n "${IPV4}" ]
   then echo "${IPV4} $(hostname)" >> /etc/hosts
 fi
 #
-yum -y module enable idm:DL1
-yum -y install ipa\*
+yum -y module enable idm:DL1 && \
+yum -y module install idm:DL1/* && \
+yum -y install ipa\* && \
 #
 ipa-server-install \
 --admin-password=${IPA_PASS} \
@@ -33,12 +34,12 @@ ipa-server-install \
 --forwarder=208.67.222.222 \
 --forwarder=208.67.220.220 \
 --mkhomedir \
---enable-compat \
---no-ntp <<EOF
+--enable-compat <<EOF || exit
 ${DEFAULT}
 ${DEFAULT}
 ${DEFAULT}
 ${DEFAULT}
+no
 yes
 EOF
 #
