@@ -60,5 +60,7 @@ ipa-replica-install \
 --no-host-dns \
 --skip-conncheck
 #
-kinit ${IPA_ADMIN_PASS}
+kinit admin <<EOF
+${IPA_ADMIN_PASS}
+EOF
 ipa hostgroup-add-member ipaservers --hosts $(hostname)
