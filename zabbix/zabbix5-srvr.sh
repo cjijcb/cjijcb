@@ -1,7 +1,7 @@
 #!/bin/bash
 RD='\033[1;31m'
 GRN='\033[1;32m'
-YLW='\033[1;33m'
+PRPL='\033[1;35m'
 NC='\033[0m'
 #
 echo -n -e "Set a ${GRN}root ${RD}password${NC} for ${GRN}mariaDB${NC}:"
@@ -46,7 +46,7 @@ EOF
 mysql --user="root" --password="${ROOTPASS}" --execute="create database zabbix character set utf8 collate utf8_bin;" && \
 mysql --user="root" --password="${ROOTPASS}" --execute="grant all privileges on zabbix.* to zabbix@localhost identified by \"${ZBXPASS}\";" && \
 mysql --user="root" --password="${ROOTPASS}" zabbix --execute="set global innodb_strict_mode='OFF';" && \
-echo -e "${GRN}Importing database shema for Zabbix server. It could take up to 5 minutes...${NC}" && \
+echo -e "${PRPL}Importing database shema for Zabbix server. It could take up to 5 minutes...${NC}" \
 zcat /usr/share/doc/zabbix-server-mysql*/create.sql.gz | mysql --user="zabbix" --password="${ZBXPASS}" zabbix &&\
 mysql --user="root" --password="${ROOTPASS}" zabbix --execute="set global innodb_strict_mode='ON';" && \
 #
@@ -113,12 +113,11 @@ sudo systemctl stop mysql
 sudo systemctl start mysql
 sudo systemctl start zabbix-server
 #
+echo "Creating additional SELINUX policy for Zabbix..."
 setsebool -P httpd_can_connect_zabbix 1
 setsebool -P zabbix_can_network 1
-#
 setenforce 1 && sed -i 's/^SELINUX=.*/SELINUX=enforcing/g' /etc/selinux/config
-#
-echo "Creating additional SELINUX policy for Zabbix..."
 grep "denied.*zabbix" /var/log/audit/audit.log | audit2allow -M zabbix_policy > /dev/null 2>&1
 semodule -i zabbix_policy.pp
 #
+echo -e "${GRN}Zabbix Server 5.0 Successfully Installed.${NC}"
