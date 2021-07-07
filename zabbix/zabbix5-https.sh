@@ -5,7 +5,7 @@ IPV4=$( nmcli | sed -E -n "/: connected to/,/inet4/{/inet4/ s/.*inet4[[:space:]]
 yum -y install mod_ssl && \
 mkdir -p /etc/httpd/ssl/private && \
 chmod 700 /etc/httpd/ssl/private && \
-openssl req -x509 -nodes -days 1825 -newkey rsa:2048 -keyout /etc/httpd/ssl/private/apache-selfsigned.key -out /etc/httpd/ssl/apache-selfsigned.crt > /dev/null 2>&1 <<EOF || exit
+openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout /etc/httpd/ssl/private/apache-selfsigned.key -out /etc/httpd/ssl/apache-selfsigned.crt > /dev/null 2>&1 <<EOF || exit
 ${NULL}
 ${NULL}
 ${NULL}
