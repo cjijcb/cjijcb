@@ -19,8 +19,16 @@ fi
 setenforce 0 && \
 sed -i.orig 's/^SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
 rpm -Uvh https://repo.zabbix.com/zabbix/5.0/rhel/8/x86_64/zabbix-release-5.0-1.el8.noarch.rpm
-yum clean all > /devn/null 2>&1 
-yum -y install zabbix-server-mysql zabbix-web-mysql zabbix-apache-conf zabbix-agent mariadb-server && \
+yum clean all > /dev/null 2>&1 
+#
+yum -y install \
+zabbix-server-mysql \
+zabbix-web-mysql \
+zabbix-apache-conf \
+zabbix-agent \
+mariadb-server \
+policycoreutils-python-utils && \
+#
 systemctl start mariadb && \
 systemctl enable mariadb && \
 #
@@ -51,3 +59,64 @@ sed -i.orig "s/.*php_value\[date\.timezone\].*/php_value[date.timezone] = Asia\/
 systemctl restart httpd php-fpm
 systemctl enable httpd php-fpm
 #
+#~~~OPTIMIZATION~~~#
+#
+curl --progress-bar -O https://raw.githubusercontent.com/cjijcb/cjijcb/main/sources/zabbix/zbx_db_partitiong.sql
+mysql --user="zabbix" --password="${ZBXPASS}" zabbix < zbx_db_partitiong.sql
+sed -i "/\[mysqld\]/ a event_scheduler = ON" /etc/my.cnf.d/mariadb-server.cnf
+sudo systemctl restart mysql
+mysql --user="zabbix" --password="${ZBXPASS}" zabbix --execute="CREATE EVENT zbx_partitioning ON SCHEDULE EVERY 12 HOUR DO CALL partition_maintenance_all('zabbix');"
+echo -e \
+"StartPollers=100\n\
+StartPollersUnreachable=50\n\
+StartPingers=50\n\
+StartTrappers=10\n\
+StartDiscoverers=15\n\
+StartPreprocessors=15\n\
+StartHTTPPollers=5\n\
+StartAlerters=5\n\
+StartTimers=2\n\
+StartEscalators=2\n\
+CacheSize=128M\n\
+HistoryCacheSize=64M\n\
+HistoryIndexCacheSize=32M\n\
+TrendCacheSize=32M\n\
+ValueCacheSize=256M" \
+>> /etc/zabbix/zabbix_server.conf
+#
+cat > /etc/my.cnf.d/10_my_tweaks.cnf <<EOF
+[mysqld]
+max_connections = 404
+innodb_buffer_pool_size = 800M
+innodb-log-file-size = 128M
+innodb-log-buffer-size = 128M
+innodb-file-per-table = 1
+innodb_buffer_pool_instances = 8
+innodb_old_blocks_time = 1000
+innodb_stats_on_metadata = off
+innodb-flush-method = O_DIRECT
+innodb-log-files-in-group = 2
+innodb-flush-log-at-trx-commit = 2
+tmp-table-size = 96M
+max-heap-table-size = 96M
+open_files_limit = 65535
+max_connect_errors = 1000000
+connect_timeout = 60
+wait_timeout = 28800
+EOF
+#
+sudo chown mysql:mysql /etc/my.cnf.d/10_my_tweaks.cnf
+sudo chmod 644 /etc/my.cnf.d/10_my_tweaks.cnf
+#
+sudo systemctl stop zabbix-server
+sudo systemctl stop mysql
+sudo systemctl start mysql
+sudo systemctl start zabbix-server
+#
+setsebool -P httpd_can_connect_zabbix 1
+setsebool -P zabbix_can_network 1
+#
+setenforce 1 && sed -i 's/^SELINUX=.*/SELINUX=enforcing/g' /etc/selinux/config
+#
+grep "denied.*zabbix" /var/log/audit/audit.log | audit2allow -M zabbix_policy
+semodule -i zabbix_policy.pp
