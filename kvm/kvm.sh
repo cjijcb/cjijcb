@@ -1,4 +1,10 @@
 #!/bin/bash
+#
+echo -e \
+"=============================================\n\
+created by cjijcb • https://github.com/cjijcb\n\
+============================================="
+#
 yum -y module enable virt
 yum -y install qemu-kvm libvirt-client\* libvirt-daemon\* xorg-x11-xauth virt-install virt-manager virt-clone
 systemctl enable --now libvirtd
