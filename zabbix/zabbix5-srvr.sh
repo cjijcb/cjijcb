@@ -61,11 +61,11 @@ systemctl enable httpd php-fpm
 #
 #~~~OPTIMIZATION~~~#
 #
-curl --progress-bar -O https://raw.githubusercontent.com/cjijcb/cjijcb/main/sources/zabbix/zbx_db_partitiong.sql
-mysql --user="zabbix" --password="${ZBXPASS}" zabbix < zbx_db_partitiong.sql
-sed -i "/\[mysqld\]/ a event_scheduler = ON" /etc/my.cnf.d/mariadb-server.cnf
-sudo systemctl restart mysql
-mysql --user="zabbix" --password="${ZBXPASS}" zabbix --execute="CREATE EVENT zbx_partitioning ON SCHEDULE EVERY 12 HOUR DO CALL partition_maintenance_all('zabbix');"
+curl --progress-bar -O https://raw.githubusercontent.com/cjijcb/cjijcb/main/sources/zabbix/zbx_db_partitiong.sql && \
+mysql --user="zabbix" --password="${ZBXPASS}" zabbix < zbx_db_partitiong.sql && \
+sed -i "/\[mysqld\]/ a event_scheduler = ON" /etc/my.cnf.d/mariadb-server.cnf && \
+sudo systemctl restart mysql && \
+mysql --user="zabbix" --password="${ZBXPASS}" zabbix --execute="CREATE EVENT zbx_partitioning ON SCHEDULE EVERY 12 HOUR DO CALL partition_maintenance_all('zabbix');" && \
 echo -e \
 "StartPollers=100\n\
 StartPollersUnreachable=50\n\
@@ -118,5 +118,7 @@ setsebool -P zabbix_can_network 1
 #
 setenforce 1 && sed -i 's/^SELINUX=.*/SELINUX=enforcing/g' /etc/selinux/config
 #
-grep "denied.*zabbix" /var/log/audit/audit.log | audit2allow -M zabbix_policy
+echo "Creating additional SELINUX policy for Zabbix..."
+grep "denied.*zabbix" /var/log/audit/audit.log | audit2allow -M zabbix_policy > /dev/null 2>&1
 semodule -i zabbix_policy.pp
+#
