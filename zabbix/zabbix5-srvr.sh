@@ -46,7 +46,7 @@ EOF
 mysql --user="root" --password="${ROOTPASS}" --execute="create database zabbix character set utf8 collate utf8_bin;" && \
 mysql --user="root" --password="${ROOTPASS}" --execute="grant all privileges on zabbix.* to zabbix@localhost identified by \"${ZBXPASS}\";" && \
 mysql --user="root" --password="${ROOTPASS}" zabbix --execute="set global innodb_strict_mode='OFF';" && \
-echo -e "${PRPL}Importing database shema for Zabbix server. It could take up to 5 minutes...${NC}" \
+echo -e "${PRPL}Importing database shema for Zabbix server. It could take up to 5 minutes...${NC}";
 zcat /usr/share/doc/zabbix-server-mysql*/create.sql.gz | mysql --user="zabbix" --password="${ZBXPASS}" zabbix &&\
 mysql --user="root" --password="${ROOTPASS}" zabbix --execute="set global innodb_strict_mode='ON';" && \
 #
