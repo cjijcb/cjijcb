@@ -62,6 +62,7 @@ systemctl enable httpd php-fpm
 #~~~OPTIMIZATION~~~#
 #
 curl --progress-bar -O https://raw.githubusercontent.com/cjijcb/cjijcb/main/sources/zabbix/zbx_db_partitiong.sql && \
+echo "Creating MySQL partitions on History and Events tables.."
 mysql --user="zabbix" --password="${ZBXPASS}" zabbix < zbx_db_partitiong.sql && \
 sed -i "/\[mysqld\]/ a event_scheduler = ON" /etc/my.cnf.d/mariadb-server.cnf && \
 sudo systemctl restart mysql && \
