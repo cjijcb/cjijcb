@@ -1,4 +1,6 @@
 #!/bin/bash
+GRN='\033[1;32m'
+NC='\033[0m'
 echo -n "Enter the Zabbix server IP:"
 read ZBXIP 
 echo -n "Set hostname for this Zabbix agent (e.g. ZBX01) or just press enter for autogenaration:"
@@ -21,3 +23,4 @@ fi
 #
 sudo systemctl restart zabbix-agent
 sudo systemctl enable zabbix-agent
+echo -e "${GRN}Zabbix Agent 5.0 Successfully Installed.${NC}"
