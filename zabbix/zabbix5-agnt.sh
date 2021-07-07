@@ -3,7 +3,7 @@ GRN='\033[1;32m'
 NC='\033[0m'
 echo -n "Enter the Zabbix server IP:"
 read ZBXIP 
-echo -n "Set hostname for this Zabbix agent (e.g. ZBX01) or just press enter for autogenaration:"
+echo -n "Set hostname for this Zabbix agent or just press enter for autogenaration:"
 read AZBX_HOSTNAME
 rpm -Uvh https://repo.zabbix.com/zabbix/5.0/rhel/$(rpm -E %{rhel})/x86_64/zabbix-release-5.0-1.el$(rpm -E %{rhel}).noarch.rpm
 yum -y install zabbix-agent
