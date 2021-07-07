@@ -3,6 +3,11 @@ RD='\033[0;31m'
 GRN='\033[0;32m'
 NC='\033[0m'
 #
+echo -e \
+"=============================================\n\
+created by cjijcb • https://github.com/cjijcb\n\
+============================================="
+#
 echo -n -e "Enter the IPA ${GRN}Server Name${NC}:"
 read IPA_SRVR
 if [[ -z "$IPA_SRVR" ]];
