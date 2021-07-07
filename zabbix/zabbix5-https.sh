@@ -14,11 +14,12 @@ ${NULL}
 $(hostname)
 ${NULL}
 EOF
+echo "Configuring SSL Certificate..."
 sed -i \
-"s/^DocumentRoot.*/DocumentRoot \"\/usr\/share\/zabbix\"/; \
-s/^ServerName.*/ServerName ${IPV4}:443/; \
-s/^SSLCertificateFile.*/SSLCertificateFile \/etc\/httpd\/ssl\/apache-selfsigned.crt/; \
-s/^SSLCertificateKeyFile.*/SSLCertificateKeyFile \/etc\/httpd\/ssl\/private\/apache-selfsigned.key/" \
+"s/^[#]*[[:space:]]*DocumentRoot.*/DocumentRoot \"\/usr\/share\/zabbix\"/; \
+s/^[#]*[[:space:]]*ServerName.*/ServerName ${IPV4}:443/; \
+s/^[#]*[[:space:]]*SSLCertificateFile.*/SSLCertificateFile \/etc\/httpd\/ssl\/apache-selfsigned.crt/; \
+s/^[#]*[[:space:]]*SSLCertificateKeyFile.*/SSLCertificateKeyFile \/etc\/httpd\/ssl\/private\/apache-selfsigned.key/" \
 /etc/httpd/conf.d/ssl.conf && \
 systemctl restart httpd && \
 echo -e "${GRN}HTTPS successfully enabled.${NC}"
