@@ -1,5 +1,5 @@
 #!/bin/bash
-yum install mod_ssl
+yum -y install mod_ssl
 mkdir -p /etc/httpd/ssl/private
 chmod 700 /etc/httpd/ssl/private
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/httpd/ssl/private/apache-selfsigned.key -out /etc/httpd/ssl/apache-selfsigned.crt <<EOF
