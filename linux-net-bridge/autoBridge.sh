@@ -1,4 +1,10 @@
 #!/bin/bash
+#
+echo -e \
+"=============================================\n\
+created by cjijcb • https://github.com/cjijcb\n\
+============================================="
+#
 IPV4=$( nmcli | sed -E -n "/: connected to/,/inet4/{/inet4/ s/.*inet4[[:space:]](.*)\/.*/\1/p}" ) && \
 PRFX=$( nmcli | sed -E -n "/: connected to/,/inet4/{/inet4/ s/.*inet4.*\/(.*)/\1/p}" ) && \
 GTWY=$( ip route | sed -E -n "s/default via (.*) dev.*/\1/p" ) && \
