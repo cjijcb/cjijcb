@@ -2,6 +2,12 @@
 RD='\033[0;31m'
 GRN='\033[0;32m'
 NC='\033[0m'
+#
+echo -e \
+"=============================================\n\
+created by cjijcb • https://github.com/cjijcb\n\
+============================================="
+#
 IPV4=$( nmcli | sed -E -n "/: connected to/,/inet4/{/inet4/ s/.*inet4[[:space:]](.*)\/.*/\1/p}" ) >/dev/null 2>&1
 #
 echo -n -e "Enter a new password for ${GRN}Directory Manager${NC}:"
