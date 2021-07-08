@@ -1,4 +1,10 @@
 #!/bin/bash
+#
+echo -e \
+"=============================================\n\
+created by cjijcb • https://github.com/cjijcb\n\
+============================================="
+#
 yum -y install \
 libnsl \
 perl \
