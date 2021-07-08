@@ -5,6 +5,11 @@ GRN='\033[0;32m'
 YLW='\033[1;33m'
 NC='\033[0m'
 #
+echo -e \
+"=============================================\n\
+created by cjijcb • https://github.com/cjijcb\n\
+============================================="
+#
 echo -n -e "Enter a new ${GRN}root ${RD}password${NC} for ${GRN}mariaDB${NC}:"
 read rootPass
 if [[ -z "$rootPass" ]];
