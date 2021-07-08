@@ -3,6 +3,12 @@ RD='\033[1;31m'
 GRN='\033[1;32m'
 PRPL='\033[1;35m'
 NC='\033[0m'
+#
+echo -e \
+"=============================================\n\
+created by cjijcb • https://github.com/cjijcb\n\
+============================================="
+#
 echo -n "Set a TLS PSK Identity for this agent (it should be unique e.g. ZBX01):"
 read TLS_PSK_ID
 sudo openssl rand -hex 32 > /etc/zabbix/zabbix_agent.psk && \
