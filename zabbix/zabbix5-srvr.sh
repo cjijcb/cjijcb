@@ -4,6 +4,11 @@ GRN='\033[1;32m'
 PRPL='\033[1;35m'
 NC='\033[0m'
 #
+echo -e \
+"=============================================\n\
+created by cjijcb • https://github.com/cjijcb\n\
+============================================="
+#
 echo -n -e "Set a ${GRN}root ${RD}password${NC} for ${GRN}mariaDB${NC}:"
 read ROOTPASS
 if [[ -z "$ROOTPASS" ]];
