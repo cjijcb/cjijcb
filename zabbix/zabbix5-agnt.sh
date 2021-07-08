@@ -1,12 +1,12 @@
 #!/bin/bash
+GRN='\033[1;32m'
+NC='\033[0m'
 #
 echo -e \
 "=============================================\n\
 created by cjijcb • https://github.com/cjijcb\n\
 ============================================="
 #
-GRN='\033[1;32m'
-NC='\033[0m'
 echo -n "Enter the Zabbix server IP:"
 read ZBXIP 
 echo -n "Set hostname for this Zabbix agent or just press enter for autogenaration:"
