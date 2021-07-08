@@ -1,12 +1,12 @@
 #!/bin/bash
+GRN='\033[1;32m'
+NC='\033[0m'
 #
 echo -e \
 "=============================================\n\
 created by cjijcb • https://github.com/cjijcb\n\
 ============================================="
 #
-GRN='\033[1;32m'
-NC='\033[0m'
 IPV4=$( nmcli | sed -E -n "/: connected to/,/inet4/{/inet4/ s/.*inet4[[:space:]](.*)\/.*/\1/p}" ) && \
 yum -y install mod_ssl && \
 mkdir -p /etc/httpd/ssl/private && \
