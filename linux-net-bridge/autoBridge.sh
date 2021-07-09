@@ -16,7 +16,7 @@ do
     SLAVE_ETHERTNET_DEV_NAME=$( nmcli con show "$PORT_BRIDGE_CON_NAME" | sed -En "s/connection\.interface-name:[[:space:]]+([^[:space:]].*)/\1/p" ) > /dev/null 2>&1
     MASTER_BRIDGE_DEV_NAME=$( nmcli con show "$PORT_BRIDGE_CON_NAME" | sed -En "s/connection\.master:[[:space:]]+([^[:space:]].*)/\1/p" ) > /dev/null 2>&1
     MASTER_BRIDGE_CON_NAME=$( nmcli dev show "$MASTER_BRIDGE_DEV_NAME" | sed -En "s/GENERAL\.CONNECTION:[[:space:]]+([^[:space:]]+.*)/\1/p" ) > /dev/null 2>&1
-  break
+    break
   fi
 done
 #
