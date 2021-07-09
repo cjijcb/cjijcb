@@ -7,8 +7,8 @@ echo -e \
 created by cjijcb • https://github.com/cjijcb\n\
 ============================================="
 echo "detecting existing bridge interface..."
-ALL_CON_NAME=$( nmcli con show | sed -En "/NAME/,$ {/NAME/! s/([^[:space:]]+)[[:space:]]+.*/\1/p}" ) 
-for V in $( echo "$ALL_CON_NAME" | tr ' ' '\n' )
+ALL_CON_NAME=( $( nmcli con show | sed -En "/NAME/,$ {/NAME/! s/([^[:space:]]+)[[:space:]]+.*/\1/p}" ) ) 
+for V in "${ALL_CON_NAME[@]}"
 do
   SLAVE_TYPE=$( nmcli con show "$V" | sed -En "s/connection\.slave-type:[[:space:]]+([^[:space:]].*)/\1/p" )
   if [ "$SLAVE_TYPE" = "bridge" ]; then
