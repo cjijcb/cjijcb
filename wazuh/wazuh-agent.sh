@@ -13,7 +13,7 @@ baseurl=https://packages.wazuh.com/4.x/yum/
 protect=1
 EOF
 #
-WAZUH_MANAGER="${WAZUH_SERVER_IP}" yum install wazuh-agent
+WAZUH_MANAGER="${WAZUH_SERVER_IP}" yum -y install wazuh-agent
 systemctl daemon-reload
 systemctl enable wazuh-agent
 systemctl start wazuh-agent
