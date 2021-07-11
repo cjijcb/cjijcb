@@ -1,5 +1,5 @@
-!/bin/bash
-echo "Enter the Wazuh server IP:" 
+#!/bin/bash
+echo -n "Enter the Wazuh server IP:" 
 read WAZUH_SERVER_IP
 rpm --import https://packages.wazuh.com/key/GPG-KEY-WAZUH
 #
