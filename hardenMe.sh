@@ -194,6 +194,11 @@ echo '-w /etc/sudoers -p wa -k scope -w /etc/sudoers.d/ -p wa -k scope'  >> /etc
 echo '#cis_5113' >> /etc/audit/rules.d/audit.rules
 echo '-w /var/log/lastlog -p wa -k logins -w /var/run/faillock/ -p wa -k logins'  >> /etc/audit/rules.d/audit.rules
 #5114
+#~~~new 5114
+#~~~echo -e \
+#~~~"-w /var/log/wtmp -p wa -k logins\n\
+#~~~-w /var/log/btmp -p wa -k logins" \
+#~~~>> /etc/audit/rules.d/logins.rules
 echo '#cis_5114' >> /etc/audit/rules.d/audit.rules
 echo '-w /var/run/utmp -p wa -k session -w /var/log/wtmp -p wa -k logins -w /var/log/btmp -p wa -k logins' >> /etc/audit/rules.d/audit.rules
 #5115
@@ -204,9 +209,13 @@ echo '-a always,exit -F arch=b64 -S adjtimex -S settimeofday -S stime -k time-ch
 echo '-a always,exit -F arch=b64 -S clock_settime -k time-change' >> /etc/audit/rules.d/audit.rules
 echo '-w /etc/localtime -p wa -k time-change' >> /etc/audit/rules.d/audit.rules
 #5116
+#~~~new 5116
+#~~~echo '-w /usr/share/selinux/ -p wa -k MAC-policy' >> /etc/audit/rules.d/MAC-policy.rules
 echo '#cis_5116' >> /etc/audit/rules.d/audit.rules
 echo '-w /etc/selinux/ -p wa -k MAC-policy -w /usr/share/selinux/ -p wa -k MAC-policy'  >> /etc/audit/rules.d/audit.rules
 #5117
+#~~~new 5117
+#~~~echo '-w /etc/sysconfig/network-scripts/ -p wa -k audit_rules_networkconfig_modification' >> /etc/audit/rules.d/audit_rules_networkconfig_modification.rules
 echo '#cis_5117' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b64 -S sethostname -S setdomainname -k system-locale -a always,exit -F arch=b32 -S sethostname -S setdomainname -k system-locale -w /etc/issue -p wa -k system-locale -w /etc/issue.net -p wa -k system-locale -w /etc/hosts -p wa -k system-locale -w /etc/sysconfig/network -p wa -k system-locale -w /etc/sysconfig/network-scripts/ -p wa -k system-locale'  >> /etc/audit/rules.d/audit.rules
 #5118
