@@ -248,6 +248,12 @@ echo '#cis_5122' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b32 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete' >> /etc/audit/rules.d/audit.rules
 #5123
+#~~~new 5123
+#~~~echo -e \
+#~~~"-w /sbin/insmod -p x -k modules\n\
+#~~~-w /sbin/modprobe -p x -k modules\n\
+#~~~-w /sbin/rmmod -p x -k modules" \
+#~~~>> /etc/audit/rules.d/modules.rules
 echo '#cis_5123' >> /etc/audit/rules.d/audit.rules
 echo '-w /sbin/insmod -p x -k modules' >> /etc/audit/rules.d/audit.rules
 echo '-w /sbin/modprobe -p x -k modules' >> /etc/audit/rules.d/audit.rules
