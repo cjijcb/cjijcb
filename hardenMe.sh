@@ -227,6 +227,16 @@ echo '-a always,exit -F arch=b64 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F
 echo '-a always,exit -F arch=b64 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -k perm_mod' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b64 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod' >> /etc/audit/rules.d/audit.rules
 #5119
+#echo -e \
+#~~~"-a always,exit -F arch=b32 -S open -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access\n\
+#~~~-a always,exit -F arch=b64 -S open -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access\n\
+#~~~-a always,exit -F arch=b32 -S open -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access\n\
+#~~~-a always,exit -F arch=b64 -S open -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access\n\
+#~~~-a always,exit -F arch=b32 -S openat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access\n\
+#~~~-a always,exit -F arch=b64 -S openat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access\n\
+#~~~-a always,exit -F arch=b32 -S openat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access\n\
+#~~~-a always,exit -F arch=b64 -S openat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access" \
+#~~~>> /etc/audit/rules.d/access.rules
 echo '#cis_5119' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access' >> /etc/audit/rules.d/audit.rules
@@ -260,6 +270,8 @@ echo '-w /sbin/modprobe -p x -k modules' >> /etc/audit/rules.d/audit.rules
 echo '-w /sbin/rmmod -p x -k modules' >> /etc/audit/rules.d/audit.rules
 echo '-a always,exit -F arch=b64 -S init_module -S delete_module -k modules' >> /etc/audit/rules.d/audit.rules
 #5124
+#~~~ new 5124
+#~~~echo '-w /var/log/sudo.log -p wa -k actions' >> /etc/audit/rules.d/actions.rules
 echo '-w /var/log/sudo.log -p wa -k actions' >>  /etc/audit/rules.d/audit.rules
 #5125
 echo '-e 2' >> /etc/audit/rules.d/99-finalize.rules
