@@ -111,6 +111,8 @@ net.ipv6.conf.default.accept_ra = 0" \
 sysctl -w net.ipv6.conf.all.accept_ra=0
 sysctl -w net.ipv6.conf.default.accept_ra=0
 sysctl -w net.ipv6.route.flush=1
+#5092
+systemctl --now mask nftables.service
 #5096
 ip6tables -P INPUT DROP
 ip6tables -P OUTPUT DROP
@@ -233,6 +235,9 @@ sed -i 's/.*Banner.*/Banner \/etc\/issue.net/' /etc/ssh/sshd_config
 sed -i -E 's/^#?AllowTcpForwarding.*/AllowTcpForwarding no/' /etc/ssh/sshd_config
 #5158
 sed -i -E 's/^#?MaxSessions.*/MaxSessions 2/' /etc/ssh/sshd_config
+#5170
+sed -i '1 i readonly TMOUT=900 > /dev/null 2>&1; export TMOUT' /etc/profile
+sed -i '1 i readonly TMOUT=900 > /dev/null 2>&1; export TMOUT' /etc/bashrc
 #5172
 sed -i -E 's/umask[[:space:]]+[[:digit:]]+/umask 027/' /etc/profile.d/*.sh
 sed -i -E 's/umask[[:space:]]+[[:digit:]]+/umask 027/' /etc/profile
