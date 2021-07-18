@@ -144,6 +144,43 @@ sed -i 's/.*max_log_file_action.*/max_log_file_action = keep_logs/' /etc/audit/a
 sed -i 's/.*space_left_action.*/space_left_action = email/' /etc/audit/auditd.conf
 sed -i 's/.*action_mail_acct.*/action_mail_acct = root/' /etc/audit/auditd.conf
 echo 'admin_space_left_action = halt' >> /etc/audit/auditd.conf
+#5114
+echo -e \
+"-w /var/log/wtmp -p wa -k logins\n\
+-w /var/log/btmp -p wa -k logins" \
+>> /etc/audit/rules.d/logins.rules
+#5116
+echo '-w /usr/share/selinux/ -p wa -k MAC-policy' >> /etc/audit/rules.d/MAC-policy.rules
+#5117
+echo '-w /etc/sysconfig/network-scripts/ -p wa -k audit_rules_networkconfig_modification' >> /etc/audit/rules.d/audit_rules_networkconfig_modification.rules
+#5118
+echo -e \
+"-a always,exit -F arch=b32 -S removexattr -F auid>=1000 -F auid!=unset -F key=perm_mod\n\
+-a always,exit -F arch=b64 -S removexattr -F auid>=1000 -F auid!=unset -F key=perm_mod\n\
+-a always,exit -F arch=b32 -S lremovexattr -F auid>=1000 -F auid!=unset -F key=perm_mod\n\
+-a always,exit -F arch=b64 -S lremovexattr -F auid>=1000 -F auid!=unset -F key=perm_mod\n\
+-a always,exit -F arch=b32 -S fremovexattr -F auid>=1000 -F auid!=unset -F key=perm_mod\n\
+-a always,exit -F arch=b64 -S fremovexattr -F auid>=1000 -F auid!=unset -F key=perm_mod" \
+>> /etc/audit/rules.d/perm_mod.rules
+#5119
+echo -e \
+"-a always,exit -F arch=b32 -S open -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access\n\
+-a always,exit -F arch=b64 -S open -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access\n\
+-a always,exit -F arch=b32 -S open -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access\n\
+-a always,exit -F arch=b64 -S open -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access\n\
+-a always,exit -F arch=b32 -S openat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access\n\
+-a always,exit -F arch=b64 -S openat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access\n\
+-a always,exit -F arch=b32 -S openat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access\n\
+-a always,exit -F arch=b64 -S openat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access" \
+>> /etc/audit/rules.d/access.rules
+#5123
+echo -e \
+"-w /sbin/insmod -p x -k modules\n\
+-w /sbin/modprobe -p x -k modules\n\
+-w /sbin/rmmod -p x -k modules" \
+>> /etc/audit/rules.d/modules.rules
+#5124
+echo '-w /var/log/sudo.log -p wa -k actions' >> /etc/audit/rules.d/actions.rules
 #5127
 sed -i '1 i\\$FileCreateMode 0640' /etc/rsyslog.conf
 #5129
