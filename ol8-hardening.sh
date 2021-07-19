@@ -27,7 +27,7 @@ echo 'install usb-storage /bin/true' >> /etc/modprobe.d/usb-storage.conf
 #5025
 echo 'Defaults use_pty' >> /etc/sudoers.d/pty
 #5026
-mkdir /var/log/sudoers
+touch /var/log/sudoers
 echo 'Defaults logfile=/var/log/sudoers' >>  /etc/sudoers.d/sudoers-log
 #5029
 chown root:root /boot/grub2/grub.cfg
@@ -266,6 +266,10 @@ if grep -q "^[[:space:]]*minlen" /etc/security/pwquality.conf
   then sed -i -E "s/(^[[:space:]]*minlen[[:space:]]*=[[:space:]]*)[[:digit:]]+/\18/" /etc/security/pwquality.conf
   else sed -i -E "s/^#+[[:space:]](minlen[[:space:]]*=[[:space:]]*)[[:digit:]]/\18/" /etc/security/pwquality.conf
 fi
+#5164
+sed -i -E "s/^[[:space:]]*password[[:space:]]+sufficient[[:space:]]+pam_unix\.so.*/& remember=5/" /etc/authselect/custom/custom-sssd-profile/system-auth
+sed -i -E "s/^[[:space:]]*password[[:space:]]+requisite[[:space:]]+pam_pwquality\.so.*/& remember=5/" /etc/authselect/custom/custom-sssd-profile/system-auth
+authselect apply-changes
 #5167
 sed  -i -E 's/^#?PASS_MIN_DAYS.*/PASS_MIN_DAYS\t7/' /etc/login.defs
 #5169
