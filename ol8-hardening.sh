@@ -253,6 +253,11 @@ sed -i 's/.*Banner.*/Banner \/etc\/issue.net/' /etc/ssh/sshd_config
 sed -i -E 's/^#?AllowTcpForwarding.*/AllowTcpForwarding no/' /etc/ssh/sshd_config
 #5158
 sed -i -E 's/^#?MaxSessions.*/MaxSessions 2/' /etc/ssh/sshd_config
+#5160
+authselect create-profile custom-sssd-profile -b sssd --symlink-meta
+authselect select custom/custom-sssd-profile
+authselect enable-feature with-mkhomedir
+authselect enable-feature with-sudo
 #5161
 authselect enable-feature with-faillock
 authselect enable-feature without-nullok
