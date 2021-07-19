@@ -13,6 +13,7 @@ systemctl enable tmp.mount
 sed -i 's/^Options=.*/Options=mode=1777,strictatime,noexec,nodev,nosuid/' /etc/systemd/system/local-fs.target.wants/tmp.mount
 systemctl start tmp.mount
 echo 'systemctl start tmp.mount' >> /etc/rc.local
+chmod +x /etc/rc.d/rc.local
 #5007
 echo 'tmpfs /dev/shm tmpfs defaults,nodev,nosuid,noexec 0 0' >> /etc/fstab
 mount -o remount,noexec /tmp
@@ -45,6 +46,8 @@ echo 'install tipc /bin/true' >> /etc/modprobe.d/tipc.conf
 echo 'Authorized uses only. All activity may be monitored and reported.' > /etc/issue
 #5043
 echo 'Authorized uses only. All activity may be monitored and reported.' > /etc/issue.net
+#5048
+yum -y update --security
 #5050
 update-crypto-policies --set FIPS
 fips-mode-setup --enable
@@ -111,6 +114,10 @@ net.ipv6.conf.default.accept_ra = 0" \
 sysctl -w net.ipv6.conf.all.accept_ra=0
 sysctl -w net.ipv6.conf.default.accept_ra=0
 sysctl -w net.ipv6.route.flush=1
+#5086
+echo 'install sctp /bin/true' >> /etc/modprobe.d/sctp.conf
+#5087
+echo 'install rds /bin/true' >> /etc/modprobe.d/rds.conf
 #5092
 systemctl --now mask nftables.service
 #5096
@@ -123,6 +130,15 @@ ip6tables -P OUTPUT DROP\n\
 ip6tables -P FORWARD DROP" \
 >> /etc/rc.local
 chmod +x /etc/rc.d/rc.local
+#5099
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+iptables -A INPUT -s 127.0.0.0/8 -j DROP
+echo -e \
+"iptables -A INPUT -i lo -j ACCEPT\n\
+iptables -A OUTPUT -o lo -j ACCEPT\n\
+iptables -A INPUT -s 127.0.0.0/8 -j DROP" \
+>> /etc/rc.local
 #5101
 ip6tables -A INPUT -i lo -j ACCEPT
 ip6tables -A OUTPUT -o lo -j ACCEPT
@@ -137,7 +153,7 @@ nmcli radio all off
 #5107
 grep -q 'GRUB_CMDLINE_LINUX.*audit=1' /etc/default/grub || sed -i -E 's/^(GRUB_CMDLINE_LINUX)(.*)(audit=1|.*)\"/\1\2 audit=1"/' /etc/default/grub
 grub2-mkconfig -o /boot/grub2/grub.cfg
-#5018
+#5108
 grep -q 'GRUB_CMDLINE_LINUX.*audit_backlog_limit=' /etc/default/grub || sed -i -E 's/^(GRUB_CMDLINE_LINUX)(.*)(audit_backlog_limit=|.*)\"/\1\2 audit_backlog_limit=8192"/' /etc/default/grub
 grub2-mkconfig -o /boot/grub2/grub.cfg
 #5110
@@ -220,6 +236,8 @@ touch /etc/at.allow
 chmod og-rwx /etc/cron.allow
 chmod og-rwx /etc/at.allow
 chown root:root /etc/cron.allow
+#5142
+echo 'AllowGroups *' >> /etc/ssh/sshd_config
 #5143
 find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chown root:root {} \;
 find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chmod 0600 {} \;
@@ -235,6 +253,18 @@ sed -i 's/.*Banner.*/Banner \/etc\/issue.net/' /etc/ssh/sshd_config
 sed -i -E 's/^#?AllowTcpForwarding.*/AllowTcpForwarding no/' /etc/ssh/sshd_config
 #5158
 sed -i -E 's/^#?MaxSessions.*/MaxSessions 2/' /etc/ssh/sshd_config
+#5161
+authselect enable-feature with-faillock
+authselect enable-feature without-nullok
+#5162
+if grep -q "^[[:space:]]*minlen" /etc/security/pwquality.conf
+  then sed -i -E "s/(^[[:space:]]*minlen[[:space:]]*=[[:space:]]*)[[:digit:]]+/\18/" /etc/security/pwquality.conf
+  else sed -i -E "s/^#+[[:space:]](minlen[[:space:]]*=[[:space:]]*)[[:digit:]]/\18/" /etc/security/pwquality.conf
+fi
+#5167
+sed  -i -E 's/^#?PASS_MIN_DAYS.*/PASS_MIN_DAYS\t7/' /etc/login.defs
+#5169
+useradd -D -f 30
 #5170
 sed -i '1 i readonly TMOUT=900 > /dev/null 2>&1; export TMOUT' /etc/profile
 sed -i '1 i readonly TMOUT=900 > /dev/null 2>&1; export TMOUT' /etc/bashrc
@@ -243,9 +273,12 @@ sed -i -E 's/umask[[:space:]]+[[:digit:]]+/umask 027/' /etc/profile.d/*.sh
 sed -i -E 's/umask[[:space:]]+[[:digit:]]+/umask 027/' /etc/profile
 sed -i -E 's/umask[[:space:]]+[[:digit:]]+/umask 027/' /etc/bashrc
 sed -i -E 's/UMASK[[:space:]]+[[:digit:]]+/UMASK\t\t027/' /etc/login.defs
-#
-
-
-
-
-
+#5173
+sed -i -E "s/.*(auth[[:space:]]+required[[:space:]]+pam_wheel.so[[:space:]]+use_uid)/\1/" /etc/pam.d/su
+#5178
+chown root:root /etc/passwd-
+chmod 600 /etc/passwd-
+echo -e \
+"chown root:root /etc/passwd-\n\
+chmod 600 /etc/passwd-" \
+>> /etc/rc.local
