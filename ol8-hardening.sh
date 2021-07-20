@@ -297,4 +297,6 @@ chmod 600 /etc/passwd-" \
 >> /etc/rc.local
 #oscap1
 sed -i "/\[pam\]/a pam_cert_auth = true" /etc/sssd/sssd.conf
+#oscap2
+systemctl mask --now oddjobd.service
 
