@@ -157,7 +157,7 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 grep -q 'GRUB_CMDLINE_LINUX.*audit_backlog_limit=' /etc/default/grub || sed -i -E 's/^(GRUB_CMDLINE_LINUX)(.*)(audit_backlog_limit=|.*)\"/\1\2 audit_backlog_limit=8192"/' /etc/default/grub
 grub2-mkconfig -o /boot/grub2/grub.cfg
 #5110
-sed -i 's/.*max_log_file_action.*/max_log_file_action = keep_logs/' /etc/audit/auditd.conf
+sed -i 's/.*max_log_file_action.*/max_log_file_action = rotate' /etc/audit/auditd.conf
 #5111
 sed -i 's/.*space_left_action.*/space_left_action = email/' /etc/audit/auditd.conf
 sed -i 's/.*action_mail_acct.*/action_mail_acct = root/' /etc/audit/auditd.conf
@@ -270,6 +270,8 @@ fi
 sed -i -E "s/^[[:space:]]*password[[:space:]]+sufficient[[:space:]]+pam_unix\.so.*/& remember=5/" /etc/authselect/custom/custom-sssd-profile/system-auth
 sed -i -E "s/^[[:space:]]*password[[:space:]]+requisite[[:space:]]+pam_pwquality\.so.*/& remember=5/" /etc/authselect/custom/custom-sssd-profile/system-auth
 authselect apply-changes
+sed -i -E "s/(^[[:space:]]*auth[[:space:]]+required[[:space:]]+pam_faillock\.so[^\{]+[[:alnum:]])([[:space:]]*\{?.*)/\1 deny=6 unlock_time=1800\2/" /etc/authselect/custom/custom-sssd-profile/system-auth
+sed -i -E "s/(^[[:space:]]*auth[[:space:]]+required[[:space:]]+pam_faillock\.so[^\{]+[[:alnum:]])([[:space:]]*\{?.*)/\1 deny=6 unlock_time=1800\2/" /etc/authselect/custom/custom-sssd-profile/password-auth
 #5167
 sed  -i -E 's/^#?PASS_MIN_DAYS.*/PASS_MIN_DAYS\t7/' /etc/login.defs
 #5169
