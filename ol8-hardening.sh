@@ -49,8 +49,7 @@ echo 'Authorized uses only. All activity may be monitored and reported.' > /etc/
 #5048
 yum -y update --security
 #5050
-update-crypto-policies --set FIPS
-fips-mode-setup --enable
+update-crypto-policies --set DEFAULT
 #5075
 cho -e \
 "net.ipv4.conf.all.send_redirects = 0\n\
@@ -157,7 +156,7 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 grep -q 'GRUB_CMDLINE_LINUX.*audit_backlog_limit=' /etc/default/grub || sed -i -E 's/^(GRUB_CMDLINE_LINUX)(.*)(audit_backlog_limit=|.*)\"/\1\2 audit_backlog_limit=8192"/' /etc/default/grub
 grub2-mkconfig -o /boot/grub2/grub.cfg
 #5110
-sed -i 's/.*max_log_file_action.*/max_log_file_action = rotate' /etc/audit/auditd.conf
+sed -i 's/.*max_log_file_action.*/max_log_file_action = rotate/' /etc/audit/auditd.conf
 #5111
 sed -i 's/.*space_left_action.*/space_left_action = email/' /etc/audit/auditd.conf
 sed -i 's/.*action_mail_acct.*/action_mail_acct = root/' /etc/audit/auditd.conf
@@ -267,14 +266,14 @@ if grep -q "^[[:space:]]*minlen" /etc/security/pwquality.conf
   else sed -i -E "s/^#+[[:space:]](minlen[[:space:]]*=[[:space:]]*)[[:digit:]]/\18/" /etc/security/pwquality.conf
 fi
 #5163
-sed -i -E "s/(^[[:space:]]*auth[[:space:]]+required[[:space:]]+pam_faillock\.so[^\{]+[[:alnum:]])([[:space:]]*\{?.*)/\1 deny=6 unlock_time=1800\2/" /etc/authselect/custom/custom-sssd-profile/system-auth
-sed -i -E "s/(^[[:space:]]*auth[[:space:]]+required[[:space:]]+pam_faillock\.so[^\{]+[[:alnum:]])([[:space:]]*\{?.*)/\1 deny=6 unlock_time=1800\2/" /etc/authselect/custom/custom-sssd-profile/password-auth
+sed -i -E "s/(^[[:space:]]*auth[[:space:]]+required[[:space:]]+pam_faillock\.so[^\{]+[[:alnum:]])([[:space:]]*\{?.*)/\1 deny=6 unlock_time=1800 fail_interval=900\2/" /etc/authselect/custom/custom-sssd-profile/system-auth
+sed -i -E "s/(^[[:space:]]*auth[[:space:]]+required[[:space:]]+pam_faillock\.so[^\{]+[[:alnum:]])([[:space:]]*\{?.*)/\1 deny=6 unlock_time=1800 fail_interval=900\2/" /etc/authselect/custom/custom-sssd-profile/password-auth
+sed -i -E "/auth.*pam_unix.so/,$ s/(auth[[:space:]]+)[^[:space:]]+.....([[:space:]]+pam_faillock\.so.*)/\1[default=die]\2/" /etc/authselect/custom/custom-sssd-profile/system-auth
+sed -i -E "/auth.*pam_unix.so/,$ s/(auth[[:space:]]+)[^[:space:]]+.....([[:space:]]+pam_faillock\.so.*)/\1[default=die]\2/" /etc/authselect/custom/custom-sssd-profile/password-auth
 #5164
 sed -i -E "s/^[[:space:]]*password[[:space:]]+sufficient[[:space:]]+pam_unix\.so.*/& remember=5/" /etc/authselect/custom/custom-sssd-profile/system-auth
 sed -i -E "s/^[[:space:]]*password[[:space:]]+requisite[[:space:]]+pam_pwquality\.so.*/& remember=5/" /etc/authselect/custom/custom-sssd-profile/system-auth
 authselect apply-changes
-sed -i -E "s/(^[[:space:]]*auth[[:space:]]+required[[:space:]]+pam_faillock\.so[^\{]+[[:alnum:]])([[:space:]]*\{?.*)/\1 deny=6 unlock_time=1800\2/" /etc/authselect/custom/custom-sssd-profile/system-auth
-sed -i -E "s/(^[[:space:]]*auth[[:space:]]+required[[:space:]]+pam_faillock\.so[^\{]+[[:alnum:]])([[:space:]]*\{?.*)/\1 deny=6 unlock_time=1800\2/" /etc/authselect/custom/custom-sssd-profile/password-auth
 #5167
 sed  -i -E 's/^#?PASS_MIN_DAYS.*/PASS_MIN_DAYS\t7/' /etc/login.defs
 #5169
@@ -296,3 +295,6 @@ echo -e \
 "chown root:root /etc/passwd-\n\
 chmod 600 /etc/passwd-" \
 >> /etc/rc.local
+#oscap1
+sed -i "/\[pam\]/a pam_cert_auth = true" /etc/sssd/sssd.conf
+
