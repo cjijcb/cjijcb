@@ -266,6 +266,9 @@ if grep -q "^[[:space:]]*minlen" /etc/security/pwquality.conf
   then sed -i -E "s/(^[[:space:]]*minlen[[:space:]]*=[[:space:]]*)[[:digit:]]+/\18/" /etc/security/pwquality.conf
   else sed -i -E "s/^#+[[:space:]](minlen[[:space:]]*=[[:space:]]*)[[:digit:]]/\18/" /etc/security/pwquality.conf
 fi
+#5163
+sed -i -E "s/(^[[:space:]]*auth[[:space:]]+required[[:space:]]+pam_faillock\.so[^\{]+[[:alnum:]])([[:space:]]*\{?.*)/\1 deny=6 unlock_time=1800\2/" /etc/authselect/custom/custom-sssd-profile/system-auth
+sed -i -E "s/(^[[:space:]]*auth[[:space:]]+required[[:space:]]+pam_faillock\.so[^\{]+[[:alnum:]])([[:space:]]*\{?.*)/\1 deny=6 unlock_time=1800\2/" /etc/authselect/custom/custom-sssd-profile/password-auth
 #5164
 sed -i -E "s/^[[:space:]]*password[[:space:]]+sufficient[[:space:]]+pam_unix\.so.*/& remember=5/" /etc/authselect/custom/custom-sssd-profile/system-auth
 sed -i -E "s/^[[:space:]]*password[[:space:]]+requisite[[:space:]]+pam_pwquality\.so.*/& remember=5/" /etc/authselect/custom/custom-sssd-profile/system-auth
