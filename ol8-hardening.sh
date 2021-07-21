@@ -1,4 +1,19 @@
 #!/bin/bash
+#Ensure PAM Enforces Password Requirements - Minimum Digit Characters
+sed -i -E 's/#?[[:space:]]*dcredit.*/dcredit = -1/'  /etc/security/pwquality.conf
+#Ensure PAM Enforces Password Requirements - Minimum Lowercase Characters
+sed -i -E 's/#?[[:space:]]*lcredit.*/lcredit = -1/'  /etc/security/pwquality.conf
+#Ensure PAM Enforces Password Requirements - Minimum Uppercase Characters
+sed -i -E 's/#?[[:space:]]*ucredit.*/ucredit = -1/'  /etc/security/pwquality.conf
+#Set Password Maximum Age @5166
+sed -i -E 's/^#?PASS_MAX_DAYS.*/PASS_MAX_DAYS\t60/' /etc/login.defs
+#Set SSH Client Alive Count Max
+sed -i -E 's/#?[[:space:]]*ClientAliveCountMax.*/ClientAliveCountMax 0/' /etc/ssh/sshd_config
+#Set SSH Idle Timeout Interval
+sed -i -E 's/#?[[:space:]]*ClientAliveInterval.*/ClientAliveInterval 600/' /etc/ssh/sshd_config
+#
+#
+#
 #5000
 echo 'install cramfs /bin/true' >> /etc/modprobe.d/cramfs.conf
 #5001
@@ -160,7 +175,7 @@ sed -i 's/.*max_log_file_action.*/max_log_file_action = rotate/' /etc/audit/audi
 #5111
 sed -i 's/.*space_left_action.*/space_left_action = email/' /etc/audit/auditd.conf
 sed -i 's/.*action_mail_acct.*/action_mail_acct = root/' /etc/audit/auditd.conf
-echo 'admin_space_left_action = halt' >> /etc/audit/auditd.conf
+echo 'admin_space_left_action = single' >> /etc/audit/auditd.conf
 #5114
 echo -e \
 "-w /var/log/wtmp -p wa -k logins\n\
@@ -295,8 +310,8 @@ echo -e \
 "chown root:root /etc/passwd-\n\
 chmod 600 /etc/passwd-" \
 >> /etc/rc.local
-#oscap1
-sed -i "/\[pam\]/a pam_cert_auth = true" /etc/sssd/sssd.conf
-#oscap2
+#
+#
+#
+#Disable Odd job daemon 
 systemctl mask --now oddjobd.service
-
