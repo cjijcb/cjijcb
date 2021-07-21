@@ -66,7 +66,7 @@ yum -y update --security
 #5050
 update-crypto-policies --set DEFAULT
 #5075
-cho -e \
+echo -e \
 "net.ipv4.conf.all.send_redirects = 0\n\
 net.ipv4.conf.default.send_redirects = 0" \
 >> /etc/sysctl.conf
