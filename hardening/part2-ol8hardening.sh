@@ -10,7 +10,7 @@ sed -i -E 's/^#?PASS_MAX_DAYS.*/PASS_MAX_DAYS\t60/' /etc/login.defs
 #Set SSH Client Alive Count Max
 sed -i -E 's/#?[[:space:]]*ClientAliveCountMax.*/ClientAliveCountMax 0/' /etc/ssh/sshd_config
 #Set SSH Idle Timeout Interval
-sed -i -E 's/#?[[:space:]]*ClientAliveInterval.*/ClientAliveInterval 600/' /etc/ssh/sshd_config
+sed -i -E 's/#?[[:space:]]*ClientAliveInterval.*/ClientAliveInterval 300/' /etc/ssh/sshd_config
 #
 #
 #
