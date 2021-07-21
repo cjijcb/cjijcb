@@ -67,4 +67,5 @@ SHA_CRYPT_MAX_ROUNDS 50000" \
 >> /etc/login.defs
 #
 yum -y install arpwatch
-
+#
+sed -i -E "s/([^[:space:]]+[[:space:]]+\/boot[[:space:]]+[^[:space:]]+[[:space:]]+[^[:space:]]+)([[:space:]]+.*)/\1,nodev,nosuid,noexec\2/" /etc/fstab
