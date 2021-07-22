@@ -91,4 +91,7 @@ mount -o remount,rw,noexec,nosuid /dev
 #
 mount | sed -En "s/([^[:space:]]+)[[:space:]]+on[[:space:]]+(\/proc)[[:space:]]+type[[:space:]]+([^[:space:]]+).*/\1 \2 \3 defaults,hidepid=2 0 0/p" >> /etc/fstab
 mount -o remount,rw,hidepid=2 /proc
-
+#
+#
+#
+sed -i "s/#*DNSSEC[[:space:]]*=.*/DNSSEC=true/" /etc/systemd/resolved.conf
