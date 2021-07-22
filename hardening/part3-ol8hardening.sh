@@ -71,5 +71,11 @@ systemctl enable arpwatch
 systemctl start arpwatch
 #
 sed -i -E "s/([^[:space:]]+[[:space:]]+\/boot[[:space:]]+[^[:space:]]+[[:space:]]+[^[:space:]]+)([[:space:]]+.*)/\1,nodev,nosuid,noexec\2/" /etc/fstab
+mount -o remount,rw,nodev,nosuid,noexec /boot
 #
 mount | sed -En "s/([^[:space:]]+)[[:space:]]+on[[:space:]]+(\/dev)[[:space:]]+type[[:space:]]+([^[:space:]]+)[[:space:]]\(([^\)]+)\)/\1 \2 \3 \4,noexec 0 0/p" >> /etc/fstab
+mount -o remount,rw,noexec /dev
+#
+mount | sed -En "s/([^[:space:]]+)[[:space:]]+on[[:space:]]+(\/proc)[[:space:]]+type[[:space:]]+([^[:space:]]+)[[:space:]]\(([^\)]+)\)/\1 \2 \3 \4,hidepid=2 0 0/p" >> /etc/fstab
+mount -o remount,rw,hidepid=2 /proc
+
