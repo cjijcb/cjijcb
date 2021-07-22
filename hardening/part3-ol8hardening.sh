@@ -95,3 +95,4 @@ mount -o remount,rw,hidepid=2 /proc
 #
 #
 sed -i "s/#*DNSSEC[[:space:]]*=.*/DNSSEC=true/" /etc/systemd/resolved.conf
+systemctl restart systemd-resolved.service
