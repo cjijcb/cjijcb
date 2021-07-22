@@ -58,9 +58,9 @@ sysctl -w kernel.randomize_va_space=2
 #5088
 echo 'install tipc /bin/true' >> /etc/modprobe.d/tipc.conf
 #5042
-echo 'Authorized uses only. All activity may be monitored and reported.' > /etc/issue
+echo 'Attention, by continuing to connect to this system, you consent to the owner storing a log of all activity. Unauthorized access is prohibited.' > /etc/issue
 #5043
-echo 'Authorized uses only. All activity may be monitored and reported.' > /etc/issue.net
+echo 'Attention, by continuing to connect to this system, you consent to the owner storing a log of all activity. Unauthorized access is prohibited.' > /etc/issue.net
 #5048
 yum -y update --security
 #5050
