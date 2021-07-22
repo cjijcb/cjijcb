@@ -83,6 +83,8 @@ yum -y install haveged
 systemctl enable haveged
 systemctl start haveged
 #
+yum -y install rkhunter
+#
 sed -i -E "s/([^[:space:]]+[[:space:]]+\/boot[[:space:]]+[^[:space:]]+[[:space:]]+[^[:space:]]+)([[:space:]]+.*)/\1,nodev,nosuid,noexec,ro\2/" /etc/fstab
 mount -o remount,rw,nodev,nosuid,noexec /boot
 #
