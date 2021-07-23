@@ -78,7 +78,7 @@ yum -y install psacct
 systemctl enable psacct
 systemctl start psacct
 #
-yum -y install epel-release
+yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 yum -y install haveged
 systemctl enable haveged
 systemctl start haveged
