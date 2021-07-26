@@ -165,10 +165,14 @@ ip6tables -A INPUT -s ::1 -j DROP" \
 #5102
 nmcli radio all off
 #5107
-grep -q 'GRUB_CMDLINE_LINUX.*audit=1' /etc/default/grub || sed -i -E 's/^(GRUB_CMDLINE_LINUX)(.*)(audit=1|.*)\"/\1\2 audit=1"/' /etc/default/grub
+sed -i -E "s/^[[:space:]]*(GRUB_CMDLINE_LINUX=.+)audit=[^[:space:]]+[[:space:]](.*)/\1\2/" /etc/default/grub && \
+sed -i -E "s/^[[:space:]]*(GRUB_CMDLINE_LINUX=.+)[[:space:]]audit=[^(\"|\')]+/\1/" /etc/default/grub && \
+sed -i -E "s/^[[:space:]]*(GRUB_CMDLINE_LINUX=)[[:space:]]*(.)(.*)(\"|\')/\1\2\3 audit=1\2/" /etc/default/grub
 grub2-mkconfig -o /boot/grub2/grub.cfg
 #5108
-grep -q 'GRUB_CMDLINE_LINUX.*audit_backlog_limit=' /etc/default/grub || sed -i -E 's/^(GRUB_CMDLINE_LINUX)(.*)(audit_backlog_limit=|.*)\"/\1\2 audit_backlog_limit=8192"/' /etc/default/grub
+ed -i -E "s/^[[:space:]]*(GRUB_CMDLINE_LINUX=.+)audit_backlog_limit=[^[:space:]]+[[:space:]](.*)/\1\2/" /etc/default/grub && \
+sed -i -E "s/^[[:space:]]*(GRUB_CMDLINE_LINUX=.+)[[:space:]]audit_backlog_limit=[^(\"|\')]+/\1/" /etc/default/grub && \
+sed -i -E "s/^[[:space:]]*(GRUB_CMDLINE_LINUX=)[[:space:]]*(.)(.*)(\"|\')/\1\2\3 audit_backlog_limit=8192\2/" /etc/default/grub
 grub2-mkconfig -o /boot/grub2/grub.cfg
 #5110
 sed -i 's/.*max_log_file_action.*/max_log_file_action = rotate/' /etc/audit/auditd.conf
