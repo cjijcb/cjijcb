@@ -170,7 +170,7 @@ sed -i -E "s/^[[:space:]]*(GRUB_CMDLINE_LINUX=.+)[[:space:]]audit=[^(\"|\')]+/\1
 sed -i -E "s/^[[:space:]]*(GRUB_CMDLINE_LINUX=)[[:space:]]*(.)(.*)(\"|\')/\1\2\3 audit=1\2/" /etc/default/grub
 grub2-mkconfig -o /boot/grub2/grub.cfg
 #5108
-ed -i -E "s/^[[:space:]]*(GRUB_CMDLINE_LINUX=.+)audit_backlog_limit=[^[:space:]]+[[:space:]](.*)/\1\2/" /etc/default/grub && \
+sed -i -E "s/^[[:space:]]*(GRUB_CMDLINE_LINUX=.+)audit_backlog_limit=[^[:space:]]+[[:space:]](.*)/\1\2/" /etc/default/grub && \
 sed -i -E "s/^[[:space:]]*(GRUB_CMDLINE_LINUX=.+)[[:space:]]audit_backlog_limit=[^(\"|\')]+/\1/" /etc/default/grub && \
 sed -i -E "s/^[[:space:]]*(GRUB_CMDLINE_LINUX=)[[:space:]]*(.)(.*)(\"|\')/\1\2\3 audit_backlog_limit=8192\2/" /etc/default/grub
 grub2-mkconfig -o /boot/grub2/grub.cfg
