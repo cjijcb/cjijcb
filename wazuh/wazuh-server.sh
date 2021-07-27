@@ -71,6 +71,8 @@ elasticpass=$(sed -n -e 's/PASSWORD elastic = //p' ./genpass) &&
 sed -i "s/<elasticsearch_password>/$elasticpass/" /etc/filebeat/filebeat.yml &&
 sed -i "s/<elasticsearch_password>/$elasticpass/" /etc/kibana/kibana.yml &&
 #
+sed -i -E "/<auth>/,/<\/auth>/ s/([[:space:]]*<disabled>)[[:alpha:]]+(<\/disabled>)/\1yes\2/" /var/ossec/etc/ossec.conf &&
+#
 systemctl daemon-reload &&
 systemctl enable wazuh-manager &&
 systemctl start wazuh-manager &&
