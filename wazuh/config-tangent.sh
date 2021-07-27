@@ -22,7 +22,7 @@ chmod +x /etc/systemd/system/cisco-asa-syslog.sh
 #
 curl https://raw.githubusercontent.com/cjijcb/cjijcb/main/sources/wazuh.config-tangent/cisco-asa-syslog.service > /etc/systemd/system/cisco-asa-syslog.service
 systemctl daemon-reload
-systemctl enable --now cisco-asa-syslog.service
+systemctl --now enable cisco-asa-syslog.service
 systemctl start cisco-asa-syslog.service
 #
 mv /var/ossec/etc/ossec.conf /var/ossec/etc/ossec.conf.bak
