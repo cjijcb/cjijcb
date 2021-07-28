@@ -74,6 +74,7 @@ sed -i "s/<elasticsearch_password>/$elasticpass/" /etc/kibana/kibana.yml &&
 sed -i -E "/<auth>/,/<\/auth>/ s/([[:space:]]*<disabled>)[[:alpha:]]+(<\/disabled>)/\1yes\2/" /var/ossec/etc/ossec.conf &&
 sed -i -E "/<vulnerability-detector>/,/<provider/ s/([[:space:]]+<enabled>)[[:alpha:]]+(<\/enabled>)/\1yes\2/" /var/ossec/etc/ossec.conf &&
 sed -i -E "/<vulnerability-detector>/,/<\/vulnerability-detector>/{/<provider[[:space:]]+name=\"redhat\">/,/<\/provider>/ s/([[:space:]]+<\enabled>)[[:alpha:]]+(<\/enabled>)/\1yes\2/}" /var/ossec/etc/ossec.conf &&
+sed -i -E "/<vulnerability-detector>/,/<\/vulnerability-detector>/{/<provider[[:space:]]+name=\"redhat\">/,/<\/provider>/ s/[[:space:]]+(<os>[^8]<\/os>)/ <\!-- \1 -->/}" /var/ossec/etc/ossec.conf &&
 #
 systemctl daemon-reload &&
 systemctl enable wazuh-manager &&
