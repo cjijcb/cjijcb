@@ -40,3 +40,27 @@ curl https://raw.githubusercontent.com/cjijcb/cjijcb/main/sources/wazuh.config-t
 mv /var/ossec/ruleset/decoders/0065-cisco-ios_decoders.xml /var/ossec/ruleset/decoders/0065-cisco-ios_decoders.xml.bak
 curl https://raw.githubusercontent.com/cjijcb/cjijcb/main/sources/wazuh.config-tangent/0065-cisco-ios_decoders.xml > /var/ossec/ruleset/decoders/0065-cisco-ios_decoders.xml
 #
+LAST_LOCALFILE=$( grep -n "<\/localfile>" /var/ossec/etc/ossec.conf | cut -d: -f1 | tail -1 )
+sed -i -E "$LAST_LOCALFILE a\
+\\
+\n\
+  <localfile>\n\
+    <log_format>syslog<\/log_format>\n\
+    <location>\/var\/log\/pfsense.log<\/location>\n\
+  <\/localfile>\n\
+\n\
+  <localfile>\n\
+    <log_format>syslog<\/log_format>\n\
+    <location>\/var\/log\/cisco-vlan.log<\/location>\n\
+  <\/localfile>\n\
+\n\
+  <localfile>\n\
+    <log_format>syslog<\/log_format>\n\
+    <location>\/var\/log\/cisco-ios.log<\/location>\n\
+  <\/localfile>\n\
+\n\
+  <localfile>\n\
+    <log_format>syslog<\/log_format>\n\
+    <location>\/var\/log\/cisco-asa.log<\/location>\n\
+  <\/localfile>" \
+/var/ossec/etc/ossec.conf
