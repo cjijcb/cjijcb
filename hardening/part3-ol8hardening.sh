@@ -89,7 +89,7 @@ systemctl start rkhunter
 #
 yum -y install ansible
 #
-sed -i -E "s/([^[:space:]]+[[:space:]]+\/boot[[:space:]]+[^[:space:]]+[[:space:]]+[^[:space:]]+)([[:space:]]+.*)/\1,nodev,nosuid,noexec,ro\2/" /etc/fstab
+sed -i -E "s/([^[:space:]]+[[:space:]]+\/boot[[:space:]]+[^[:space:]]+[[:space:]]+[^[:space:]]+)([[:space:]]+.*)/\1,nodev,nosuid,noexec\2/" /etc/fstab
 mount -o remount,rw,nodev,nosuid,noexec /boot
 #
 mount | sed -En "s/([^[:space:]]+)[[:space:]]+on[[:space:]]+(\/dev)[[:space:]]+type[[:space:]]+([^[:space:]]+).*/\1 \2 \3 defaults,noexec,nosuid 0 0/p" >> /etc/fstab
