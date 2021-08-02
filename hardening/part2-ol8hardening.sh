@@ -30,7 +30,7 @@ systemctl start tmp.mount
 echo 'systemctl start tmp.mount' >> /etc/rc.local
 chmod +x /etc/rc.d/rc.local
 #5007
-echo 'tmpfs /dev/shm tmpfs defaults,nodev,nosuid,noexec 0 0' >> /etc/fstab
+#echo 'tmpfs /dev/shm tmpfs defaults,nodev,nosuid,noexec 0 0' >> /etc/fstab
 mount -o remount,noexec /tmp
 echo 'mount -o remount,noexec /tmp' >> /etc/rc.local
 chmod +x /etc/rc.d/rc.local
