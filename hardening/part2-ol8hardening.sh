@@ -164,6 +164,11 @@ ip6tables -A INPUT -s ::1 -j DROP" \
 >> /etc/rc.local
 #5102
 nmcli radio all off
+#5103
+sed -i -E "s/^[[:space:]]*(GRUB_CMDLINE_LINUX=.+)ipv6.disable=[^[:space:]]+[[:space:]](.*)/\1\2/" /etc/default/grub && \
+sed -i -E "s/^[[:space:]]*(GRUB_CMDLINE_LINUX=.+)[[:space:]]ipv6.disable=[^(\"|\')]+/\1/" /etc/default/grub && \
+sed -i -E "s/^[[:space:]]*(GRUB_CMDLINE_LINUX=)[[:space:]]*(.)(.*)(\"|\')/\1\2\3 ipv6.disable=1\2/" /etc/default/grub
+grub2-mkconfig -o /boot/grub2/grub.cfg
 #5107
 sed -i -E "s/^[[:space:]]*(GRUB_CMDLINE_LINUX=.+)audit=[^[:space:]]+[[:space:]](.*)/\1\2/" /etc/default/grub && \
 sed -i -E "s/^[[:space:]]*(GRUB_CMDLINE_LINUX=.+)[[:space:]]audit=[^(\"|\')]+/\1/" /etc/default/grub && \
