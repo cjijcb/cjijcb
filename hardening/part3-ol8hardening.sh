@@ -84,6 +84,7 @@ yum -y install rkhunter
 yum -y install arpwatch
 systemctl enable arpwatch
 systemctl start arpwatch
+#
 yum -y install ansible
 #
 sed -i -E "s/([^[:space:]]+[[:space:]]+\/boot[[:space:]]+[^[:space:]]+[[:space:]]+[^[:space:]]+)([[:space:]]+.*)/\1,nodev,nosuid,noexec\2/" /etc/fstab
