@@ -66,10 +66,6 @@ echo -e \
 SHA_CRYPT_MAX_ROUNDS 50000" \
 >> /etc/login.defs
 #
-yum -y install arpwatch
-systemctl enable arpwatch
-systemctl start arpwatch
-#
 yum -y install sysstat
 systemctl enable sysstat
 systemctl start sysstat
@@ -84,9 +80,10 @@ systemctl enable haveged
 systemctl start haveged
 #
 yum -y install rkhunter
-systemctl enable rkhunter
-systemctl start rkhunter
 #
+yum -y install arpwatch
+systemctl enable arpwatch
+systemctl start arpwatch
 yum -y install ansible
 #
 sed -i -E "s/([^[:space:]]+[[:space:]]+\/boot[[:space:]]+[^[:space:]]+[[:space:]]+[^[:space:]]+)([[:space:]]+.*)/\1,nodev,nosuid,noexec\2/" /etc/fstab
