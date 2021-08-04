@@ -15,7 +15,7 @@ EOF
 #
 WAZUH_MANAGER="${WAZUH_SERVER_IP}" yum -y install wazuh-agent
 sed -i -E "/<syscheck>/,/<\/syscheck>/ s/(<directories)(>.+)/\1 check_all=\"yes\" realtime=\"yes\"\2/" /var/ossec/etc/ossec.conf
-cp /var/ossec/ruleset/sca/cis_rhel8_linux.yml{.,bak0}
+cp /var/ossec/ruleset/sca/cis_rhel8_linux.yml{,.bak0}
 curl -s https://raw.githubusercontent.com/cjijcb/cjijcb/main/sources/cis_rhel8_linux.yml > /var/ossec/ruleset/sca/cis_rhel8_linux.yml
 systemctl daemon-reload
 systemctl enable wazuh-agent
