@@ -1,7 +1,7 @@
 #!/bin/bash
 #echo -n "Enter the Wazuh server IP:" 
 #read WAZUH_SERVER_IP
-if ! rpm -qa wazuh-agent; then
+if service wazuh-agent status > /dev/null 2>&1 ; then
 yum -y remove wazuh-agent
 fi
 WAZUH_SERVER_IP="172.20.18.72"
