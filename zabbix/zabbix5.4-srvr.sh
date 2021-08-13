@@ -30,6 +30,7 @@ yum -y install \
 zabbix-server-mysql \
 zabbix-web-mysql \
 zabbix-apache-conf \
+zabbix-sql-scripts \
 zabbix-agent \
 mariadb-server \
 policycoreutils-python-utils && \
