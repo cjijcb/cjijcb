@@ -65,5 +65,5 @@ sed -i -E "$LAST_LOCALFILE a\
   <\/localfile>" \
 /var/ossec/etc/ossec.conf
 #
-cp /var/ossec/ruleset/sca/cis_rhel8_linux.yml{.,bak0}
+cp /var/ossec/ruleset/sca/cis_rhel8_linux.yml{,.bak0}
 curl -s https://raw.githubusercontent.com/cjijcb/cjijcb/main/sources/cis_rhel8_linux.yml > /var/ossec/ruleset/sca/cis_rhel8_linux.yml
