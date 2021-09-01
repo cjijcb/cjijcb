@@ -23,12 +23,10 @@ echo 'install squashfs /bin/true' >> /etc/modprobe.d/squashfs.conf
 #5003
 echo 'install udf /bin/true' >> /etc/modprobe.d/udf.conf
 #5004
-systemctl unmask tmp.mount
-systemctl enable tmp.mount
-sed -i 's/^Options=.*/Options=mode=1777,strictatime,noexec,nodev,nosuid/' /etc/systemd/system/local-fs.target.wants/tmp.mount
-systemctl start tmp.mount
-echo 'systemctl start tmp.mount' >> /etc/rc.local
-chmod +x /etc/rc.d/rc.local
+sed -i -E "/^[^#]+[^[:space:]]+[[:space:]]+\/tmp/d" /etc/fstab
+echo "tmpfs /tmp tmpfs defaults,noexec,nodev,nosuid 0 0" >> /etc/fstab
+mount -a
+mount -o remount /tmp
 #5007
 #echo 'tmpfs /dev/shm tmpfs defaults,nodev,nosuid,noexec 0 0' >> /etc/fstab
 mount -o remount,noexec /tmp
