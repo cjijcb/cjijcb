@@ -276,7 +276,7 @@ sed -i -E 's/^#?AllowTcpForwarding.*/AllowTcpForwarding no/' /etc/ssh/sshd_confi
 sed -i -E 's/^#?MaxSessions.*/MaxSessions 2/' /etc/ssh/sshd_config
 #5160
 authselect create-profile custom-sssd-profile -b sssd --symlink-meta
-authselect select custom/custom-sssd-profile
+authselect select custom/custom-sssd-profile --force
 authselect enable-feature with-mkhomedir
 authselect enable-feature with-sudo
 #5161
