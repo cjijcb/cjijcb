@@ -3,7 +3,7 @@ GRN='\033[1;32m'
 NC='\033[0m'
 BOOL=0
 RESCUE_ACCOUNT=eucser
-PASSWORD='{f>e,o;I0.tL2T#LGMD<^h|xdXx9/5e;Pk@z7h-3}AwF\){"/?6G."{XM~fFqnX'
+PASSWORD='{f>e,o;I0.tL2T#LGMD<^h'
 echo "creating rescue account..."
 while [ ${BOOL} -eq 0 ]
 do
