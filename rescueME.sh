@@ -2,7 +2,7 @@
 GRN='\033[1;32m'
 NC='\033[0m'
 BOOL=0
-RESCUE_ACCOUNT=eucser
+RESCUE_ACCOUNT=emeucser
 PASSWORD='!(M22OF.E~ukb#Wv42XrG]'
 echo "creating rescue account..."
 while [ ${BOOL} -eq 0 ]
