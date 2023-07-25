@@ -1,0 +1,9 @@
+#!/bin/bash
+original_string="       Hello, this is a test.        "
+
+removed_leading_space="${original_string#"${original_string%%[![:space:]]*}"}"
+removed_trailing_space="${original_string%"${original_string##*[![:space:]]}"}"
+
+echo x"$original_string"x
+echo x"$removed_leading_space"x
+echo x"$removed_trailing_space"x
